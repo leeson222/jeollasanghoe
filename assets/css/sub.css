@@ -1,0 +1,176 @@
+/* 매장 안내 */
+.store-guide__title { margin-bottom: 30px; }
+.store-guide__visual { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.store-guide__swiper, .store-guide__map { width: 100%; min-width: 0; aspect-ratio: 1.42 / 1; overflow: hidden; border-radius: 4px; }
+.store-guide__swiper .swiper-slide, .store-guide__swiper .swiper-slide img, .store-guide__map img { width: 100%; height: 100%; }
+.store-guide__swiper .swiper-slide img, .store-guide__map img { display: block; object-fit: cover; }
+.store-guide__swiper .swiper-pagination {
+    bottom: 0px;
+    padding: 20px 0 10px 0;
+    background: linear-gradient(0deg, #000000a8, transparent);
+}
+.store-guide__swiper .swiper-pagination-bullet { width: 8px; height: 8px; margin: 0 4px; background: #fff; opacity: .45; }
+.store-guide__swiper .swiper-pagination-bullet-active { opacity: 1; }
+.store-guide__directions { margin-top: 40px; padding: 30px; border-radius: 4px; color: #fff; background: var(--sub-color2); }
+.store-guide__directions h2 { margin-bottom: 8px; font-size: 24px; font-weight: 600; line-height: 150%; }
+.store-guide__directions-desc { font-size: 20px; font-weight: 300; line-height: 150%; }
+.store-guide__info-list { display: flex; flex-direction: column; gap: 6px; margin-top: 24px; }
+.store-guide__info-list li { display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 300; line-height: 150%; color: #9EB8B1; }
+.store-guide__info-list img { width: 18px; height: 18px; filter: brightness(0) saturate(100%) invert(71%) sepia(13%) saturate(714%) hue-rotate(108deg) brightness(94%) contrast(87%); }
+.store-guide__restaurants { margin-top: 40px; }
+.store-guide__restaurants > h2 { margin-bottom: 20px; font-size: 20px; font-weight: 600; line-height: 150%; }
+.store-guide__restaurant-panel { margin-top: 30px; }
+.store-guide__restaurant-head, .store-guide__restaurant-list li { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; text-align: center; }
+.store-guide__restaurant-head { padding: 10px 20px; border-radius: 4px; font-size: 14px; font-weight: 600; line-height: 150%; color: #fff; background: var(--gray-black); }
+.store-guide__restaurant-list li { min-height: 64px; padding: 16px 20px; border-bottom: 1px solid var(--gray-2); color: var(--gray-7); }
+.store-guide__restaurant-list strong, .store-guide__restaurant-list a { font-size: 16px; font-weight: 500; line-height: 150%; }
+.store-guide__restaurant-list a:hover { text-decoration: underline; color: var(--point-color); }
+
+@media screen and (max-width: 768px) {
+    .store-guide__title { margin-bottom: 20px; }
+    .store-guide__visual { grid-template-columns: 1fr; gap: 12px; }
+    .store-guide__directions { margin-top: 24px; padding: 20px 16px; }
+    .store-guide__directions h2 { font-size: 20px; }
+    .store-guide__directions-desc { font-size: 14px; }
+    .store-guide__restaurants { margin-top: 30px; }
+    .store-guide__restaurant-panel { margin-top: 20px; }
+    .store-guide__restaurant-head, .store-guide__restaurant-list li { grid-template-columns: minmax(0, 1fr) 130px; }
+    .store-guide__restaurant-list li { min-height: 56px; padding: 12px 8px; }
+    .store-guide__restaurant-list strong, .store-guide__restaurant-list a { font-size: 14px; }
+}
+
+/* 고객센터 게시판 */
+.customer-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px; align-items: start; max-width: 1200px; }
+.customer-lnb { position: sticky; top: calc(var(--header-height) + 20px); padding: 20px 10px; border: 1px solid var(--gray-2); border-radius: 4px; background: #fff; }
+.customer-lnb__title { display: block; padding: 0 10px 4px; font-size: 14px; font-weight: 700; line-height: 150%; color: var(--gray-5); cursor: default; }
+.customer-lnb nav, .customer-lnb ul { width: 100%; }
+.customer-lnb li + li { margin-top: 2px; }
+.customer-lnb a { display: flex; width: 100%; padding: 8px 10px; border-radius: 4px; font-size: 16px; font-weight: 400; line-height: 150%; color: var(--gray-7); transition: all .2s; }
+.customer-lnb li.is-active a { font-weight: 500; color: var(--gray-black); background: var(--gray-1); }
+.customer-lnb a:hover { color: var(--gray-black); }
+.customer-board { min-width: 0; }
+.customer-board > h1 { margin-bottom: 20px; }
+
+/* 공지사항 */
+.notice-board__head, .notice-board__item { display: grid; grid-template-columns: 60px minmax(0, 1fr) 100px; align-items: center; text-align: center; }
+.notice-board__head { padding: 10px 16px; border-radius: 4px; font-size: 14px; font-weight: 700; color: var(--gray-6); background-color: var(--gray-1); }
+.notice-board__item { min-height: 64px; padding: 20px 16px; border-bottom: 1px solid var(--gray-2); color: var(--gray-7); }
+.notice-board__item:hover {
+    background-color: #fbfbfb;
+}
+.notice-board__number em { display: inline-flex; justify-content: center; align-items: center; padding: 3px 4px; border-radius: 3px; font-size: 12px; font-weight: 500; color: #fff; background: var(--gray-black); }
+.notice-board__subject { overflow: hidden; min-width: 0; padding: 0 30px; text-align: left; text-overflow: ellipsis; white-space: nowrap; font-size: 16px; font-weight: 500; color: var(--gray-black); }
+.notice-board__item time { font-size: 14px; color: var(--gray-5); }
+.customer-board__pagination { margin-top: 50px; }
+.notice-board__search { display: flex; gap: 8px; margin-top: 60px; }
+.notice-board__search-type { width: 110px; flex: none; }
+.notice-board__search-type .custom-select__trigger { width: 100%; height: 46px; }
+.notice-board__search-keyword { display: flex; position: relative; width: 340px; padding: 0; }
+.notice-board__search-keyword input { width: 100%; height: 46px; padding-right: 46px; cursor: text; }
+.notice-board__search-keyword button { position: absolute; top: 0; right: 0; width: 46px; height: 46px; }
+.notice-board__search-keyword button img { width: 18px; height: 18px; }
+
+/* FAQ */
+.customer-faq .common-tabs__list { margin-bottom: 40px; }
+.faq-panel { border-top: 1px solid var(--gray-2); }
+.faq-item { border-bottom: 1px solid var(--gray-2); }
+.faq-item__question { display: grid; grid-template-columns: 90px minmax(0, 1fr) 24px; align-items: center; gap: 0; width: 100%; padding: 16px 20px; border-radius: 0; text-align: left; transition: all .3s; }
+.faq-item__question:hover { background-color: #F7F7F7; }
+.faq-item__category { font-size: 16px; font-weight: 600; color: var(--gray-5); }
+.faq-item__question strong { overflow: hidden; min-width: 0; padding-right: 20px; text-overflow: ellipsis; white-space: nowrap; font-size: 18px; font-weight: 400; line-height: 150%; color: var(--gray-black); }
+.faq-item__question i { position: relative; width: 16px; height: 16px; justify-self: end; transition: transform .2s; }
+.faq-item__question i::before, .faq-item__question i::after { content: ''; position: absolute; top: 8px; width: 10px; height: 2px; background: var(--gray-black); }
+.faq-item__question i::before { left: 0; transform: rotate(45deg); }
+.faq-item__question i::after { right: 0; transform: rotate(-45deg); }
+.faq-item__question.is-active i { transform: rotate(180deg); }
+.faq-item__answer { padding: 24px 20px; font-size: 16px; font-weight: 400; line-height: 150%; color: var(--gray-7); background: var(--gray-1); }
+.customer-faq__contact { margin-top: 60px; text-align: center; font-size: 16px; font-weight: 500; color: var(--gray-7); }
+.customer-faq__contact a { margin-left: 8px; font-weight: 700; color: var(--point-color); }
+
+/* 브랜드 스토리 */
+#contents.brand-story {
+    position: relative;
+    padding-top: 0;
+    background: #FBFAF8;
+}
+.brand-story__banner { position: relative; height: 246px; overflow: hidden; color: #fff; }
+.brand-story__banner > img { width: 100%; height: 100%; object-fit: cover; }
+.bg-ico-wrap {
+    position: fixed;
+    left: 0;
+    top: 420px;
+}
+.brand-story__banner-content { display: flex; position: absolute; inset: 0; flex-direction: column; justify-content: center; max-width: 1600px; }
+.brand-story__banner-content span { display: block; margin-bottom: 10px; font-size: 16px; font-weight: 700; letter-spacing: .06em; color: var(--main-color); }
+.brand-story__banner-content h1 { font-size: 36px; font-weight: 700; line-height: 150%; }
+.brand-story__body { max-width: 1600px; padding: 120px 0 110px 0; }
+.brand-story__section { position: relative; z-index: 10; padding: 120px 0; border-bottom: 1px solid var(--gray-2); }
+.brand-story__section--intro { position: relative; padding: 0 0 220px 0; }
+.brand-story__section--promise { padding-bottom: 0px; border-bottom: 0; }
+.brand-story__eyebrow { margin-bottom: 64px; font-size: 16px; font-weight: 600; line-height: 150%; letter-spacing: .28em; color: var(--gray-7); }
+.brand-story__two-column { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(360px, 1fr); gap: 90px; align-items: start; }
+.brand-story__section--intro .brand-story__two-column h2 {
+    font-size: 58px;
+    font-weight: 700;
+    line-height: 150%;
+}
+.brand-story__two-column h2 {
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 140%;
+}
+.brand-story__two-column h2 em { font-weight: 700; color: var(--sub-color); }
+.brand-story__section.brand-story__section--values .brand-story__two-column h2 {
+    line-height: 150%;
+}
+
+.brand-story__section.brand-story__section--values .brand-story__two-column h2 em {
+    font-size: 70px;
+}
+.brand-story__copy { padding-top: 4px; font-size: 24px; font-weight: 400; line-height: 150%; color: var(--gray-8); }
+.brand-story__copy p + p { margin-top: 34px; }
+.brand-story__dash {
+    display: block;
+    width: 16px;
+    height: 1px;
+    margin: 64px 0 30px 0;
+    background: var(--gray-7);
+}
+.brand-story__two-column.brand-story__value-head {
+    align-items: center;
+}
+.brand-story__value-head h2 em { display: inline-block; margin-top: 8px; font-size: 48px; font-weight: 700; }
+.brand-story__value-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 120px; margin-top: 100px; }
+.brand-story__value-list li { display: flex; flex-direction: column; align-items: flex-start; }
+.brand-story__value-list span {
+    margin-bottom: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 150%;
+    color: var(--gray-7);
+}
+.brand-story__value-list strong { font-size: 38px; font-weight: 700; line-height: 150%; }
+.brand-story__value-list i { display: block; width: 20px; height: 1px; margin: 30px 0 20px 0; background: var(--gray-3); }
+.brand-story__value-list p {
+    font-size: 20px;
+    line-height: 150%;
+}
+.brand-story__section--promise .brand-story__copy p + p { margin-top: 32px; }
+
+@media screen and (max-width: 768px) {
+    .brand-story__banner { height: 190px; }
+    .brand-story__banner > img { object-position: 58% center; }
+    .brand-story__banner-content h1 { font-size: 24px; }
+    .brand-story__section { padding: 60px 0; }
+    .brand-story__section--promise { padding-bottom: 80px; }
+    .brand-story__eyebrow { margin-bottom: 34px; }
+    .brand-story__two-column { grid-template-columns: 1fr; gap: 30px; }
+    .brand-story__two-column h2 { font-size: 26px; }
+    .brand-story__copy { font-size: 15px; }
+    .brand-story__copy br { display: none; }
+    .brand-story__value-head h2 em { font-size: 38px; }
+    .brand-story__value-list { grid-template-columns: 1fr; gap: 42px; margin-top: 50px; }
+    .brand-story__value-list span { margin-bottom: 12px; }
+    .brand-story__value-list i { margin: 14px 0; }
+}
+

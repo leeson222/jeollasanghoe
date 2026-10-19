@@ -1,0 +1,151 @@
+/*******************************************************
+레이아웃 :: 헤더 영역
+*******************************************************/
+#site-header { position: fixed; z-index: 999; width: 100vw; padding: 0 60px; color: #fff; transition: all .3s; } 
+#site-header.sub-header { position: static; } 
+#site-header .site-header__inner { align-items: normal; justify-content: space-between; padding: 20px 0; } 
+
+#site-header.sub-header.is-active { position: sticky; left: 0; top: 0; width: 100%; } 
+
+/* 로고 */
+.site-header__logo a { overflow: hidden; display: block; position: relative; width: 210px; height: 40px; } 
+.site-header__logo a img { position: absolute; top: 0; left: 0; transition: all .3s; } 
+
+/* gnb */
+.site-header__main { display: flex; gap: 60px; } 
+.site-header__navigation .inner { gap: 30px; height: 100%; } 
+.site-header__menu { gap: 60px; } 
+.site-header__menu li a { font-size: 20px; font-style: normal; font-weight: 600; line-height: normal; transition: all .3; } 
+.site-header__menu li a:hover { color: var(--point-color); }
+
+/* 유틸 */
+.site-header__utility,
+.site-header__user-menu { gap: 26px; } 
+.site-header__user-menu-wrap { gap: 20px; } 
+.site-header__user-menu-wrap a { display: flex; gap: 4px; align-items: center; font-size: 16px; font-weight: 400; line-height: normal; transition: all .3s; } 
+.site-header__user-menu a:hover {
+    opacity: 0.8;
+}
+.site-header__cart-count { display: inline-block; padding: 4px 8px; border-radius: 99px; background-color: #fff; font-size: 14px; font-weight: 500; line-height: 100%; color: var(--point-color); transition: all .3s; } 
+.site-header__guest-order-link { padding: 8px 12px; border-radius: 4px; font-size: 14px; font-weight: 500; line-height: normal; color: var(--gray-black); background-color: #fff; } 
+
+/* 검색 */
+.site-header__search-icon { display: flex; position: relative; width: 24px; height: 24px; } 
+.site-header__search-icon img { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); } 
+.site-header__search-toggle { display: flex; justify-content: space-between; align-items: center; gap: 5px; min-width: 160px; padding: 8px 12px; border-radius: 4px; background-color: rgba(255, 255, 255, 0.16); box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.10); } 
+.site-header__search-label { font-size: 14px; font-style: normal; font-weight: 500; line-height: 150%; color: rgba(255, 255, 255, 0.80); } 
+.search-panel__form input { all: unset; } 
+input[type="search"]::-webkit-search-cancel-button { appearance: none; -webkit-appearance: none; width: 20px; height: 20px; background: url('../icons/keyword-del.svg') center / contain no-repeat; cursor: pointer; } 
+
+/* 검색 클릭 시 나타나는 창 */
+.search-panel { display: flex; flex-direction: column; justify-content: space-between; position: fixed; z-index: 998; right: -100%; top: 0; width: 650px; height: 100dvh; background-color: #fff; transition: right 0.3s ease; } 
+.search-panel-wrap {
+    padding: calc(var(--header-height) + 30px) 30px 30px 30px; 
+}
+.auto-save-toggle {
+    display: flex;
+    padding: 10px 30px 30px 30px;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    border-top: 1px solid var(--gray-2);
+}
+.search-panel.is-open { right: 0; } 
+.dim { position: fixed; z-index: 20; inset: 0; background-color: rgba(0, 0, 0, 0.5); } 
+.search-panel__inner { margin-bottom: 30px; } 
+.search-panel__form { display: flex; padding: 8px 10px; border-radius: 4px; border: 1px solid var(--gray-3); } 
+.search-panel__form input { font-size: 14px; font-weight: 400; line-height: 150%; } 
+.search-panel__form input { width: 100%; } 
+.search-panel__heading { display: flex; justify-content: space-between; margin-bottom: 14px; } 
+.search-panel__recent { margin-bottom: 40px; } 
+.search-panel__recent .search-panel__keywords { display: flex; flex-wrap: wrap; gap: 12px; } 
+#recent-search-title, #popular-search-title { font-size: 18px; font-weight: 600; line-height: 150%; } 
+.search-panel__clear { text-decoration: underline; font-size: 14px; font-weight: 500; line-height: 150%; color: var(--gray-5); } 
+.search-panel__recent-item { display: inline-flex; align-items: center; gap: 10px; padding: 5px 4px 5px 8px; border-radius: 4px; border: 1px solid var(--gray-3); transition: all .3s; } 
+.search-panel__recent-item:hover { border-color: var(--gray-4); background-color: #fafafa; }
+
+.search-panel__popular .search-panel__keywords { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; } 
+.search-panel__popular .search-panel__keywords .search-panel__popular-item { display: inline-flex; justify-content: start; align-items: center; gap: 10px; font-size: 16px; font-weight: 400; line-height: 150%; transition: all .3s; } 
+.search-panel__popular .search-panel__keywords .search-panel__popular-item:hover { opacity: 0.8; }
+.search-panel__recent-item span { font-size: 16px; font-style: normal; font-weight: 400; line-height: 150%; } 
+.search-panel__popular .search-panel__keywords .search-panel__popular-item em { display: inline-block; min-width: 10px; font-weight: 500; color: var(--gray-6); } 
+.search-panel__popular .search-panel__keywords .search-panel__popular-item:nth-child(-n+3) em { color: var(--point-color); } 
+
+/* 호버 및 active 시 */
+#site-header.sub-header,
+#site-header:hover,
+#site-header.is-active { color: var(--gray-black); border-bottom: 1px solid var(--gray-2); background-color: #fff; } 
+
+#site-header.sub-header .site-header__search-label,
+#site-header:hover .site-header__search-label,
+#site-header.is-active .site-header__search-label { color: var(--gray-4); } 
+
+#site-header.sub-header .site-header__search-toggle,
+#site-header:hover .site-header__search-toggle,
+#site-header.is-active .site-header__search-toggle { box-shadow: none; border: 1px solid var(--gray-2); } 
+
+#site-header.sub-header .site-header__search-toggle .site-header__search-icon img,
+#site-header:hover .site-header__search-toggle .site-header__search-icon img,
+#site-header.is-active .site-header__search-toggle .site-header__search-icon img { display: none; } 
+
+#site-header.sub-header .site-header__search-toggle .site-header__search-icon img[hidden],
+#site-header:hover .site-header__search-toggle .site-header__search-icon img[hidden],
+#site-header.is-active .site-header__search-toggle .site-header__search-icon img[hidden] { display: block !important; } 
+
+#site-header.sub-header .site-header__logo a img,
+#site-header:hover .site-header__logo a img,
+#site-header.is-active .site-header__logo a img { top: -40px; } 
+
+#site-header.sub-header .site-header__cart-count,
+#site-header:hover .site-header__cart-count,
+#site-header.is-active .site-header__cart-count { color: #fff; background-color: var(--point-color); } 
+
+#site-header.sub-header .site-header__guest-order-link,
+#site-header:hover .site-header__guest-order-link,
+#site-header.is-active .site-header__guest-order-link { padding: 8px 12px; border-radius: 4px; border: 1px solid var(--gray-3); background-color: #fff; } 
+
+#site-header.sub-header .site-header__menu-toggle img,
+#site-header:hover .site-header__menu-toggle img,
+#site-header.is-active .site-header__menu-toggle img { display: none; } 
+
+#site-header.sub-header .site-header__menu-toggle img[hidden],
+#site-header:hover .site-header__menu-toggle img[hidden],
+#site-header.is-active .site-header__menu-toggle img[hidden] { display: block !important; } 
+
+/* 전체 상품 메가 메뉴 */
+.mega-menu { overflow: hidden; position: absolute; top: var(--header-height); z-index: 10; max-width: 1300px; width: 100%; border-radius: 0 0 4px 4px; color: var(--gray-black); box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.10); opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none; transition: opacity .2s ease, transform .2s ease, visibility .2s; } 
+.mega-menu.is-open { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; } 
+.mega-menu__inner { display: flex; width: 100%; min-height: 410px; margin: 0 auto; background-color: #fff; } 
+.mega-menu__panel { flex: 0 0 150px; } 
+.mega-menu__panel.mega-menu__panel--depth3 { flex: 0 0 180px; border-right: 1px solid var(--gray-2); } 
+.mega-menu__list { display: flex; flex-direction: column; gap: 4px; } 
+.mega-menu__link { display: flex; align-items: center; justify-content: space-between; transition: color .2s, background-color .2s; } 
+.mega-menu__list--depth2 > .mega-menu__item > .mega-menu__link { padding: 12px 20px; font-size: 18px; font-style: normal; font-weight: 400; line-height: 150%; color: var(--gray-6); } 
+.mega-menu__panel.mega-menu__panel--depth2 { background-color: var(--gray-1); } 
+.mega-menu__list--depth2 > .mega-menu__item.has-child.is-active { background-color: #fff; } 
+.mega-menu__list--depth2 > .mega-menu__item.has-child.is-active .mega-menu__link { color: var(--black); } 
+
+.mega-menu__list--depth3 > .mega-menu__item > .mega-menu__link { padding: 10px 20px; font-size: 16px; font-style: normal; font-weight: 400; line-height: 150%; color: var(--gray-black); } 
+.mega-menu__list--depth3 > .mega-menu__item > .mega-menu__link:hover,
+.mega-menu__list--depth3 .mega-menu__item.no-child.is-active { font-weight: 600; color: var(--point-color); } 
+
+@media (max-width: 1200px){
+ .mega-menu__inner { padding: 0 30px; } 
+ .mega-menu__panel { flex-basis: 240px; } 
+ }
+
+/* footer */
+#site-footer { position: relative; z-index: 10; background-color: var(--gray-1); } 
+.footer-top .container { padding: 12px; } 
+.footer-top { border-bottom: 1px solid #E0E0E0; } 
+.footer-menu__item + .footer-menu__item { margin-left: 32px; } 
+.footer-menu__item { position: relative; } 
+.footer-menu__item:after { content: ""; display: block; width: 1px; height: 16px; background: #ccc; position: absolute; right: -17px; top: 50%; transform: translateY(-50%); } 
+.footer-menu__item:last-child:after { display: none; } 
+.footer-sns,
+.footer-utils { gap: 10px; } 
+.footer-sns__link { display: flex; padding: 6px 12px; justify-content: center; align-items: center; border-radius: 4px; border: 1px solid #E0E0E0; background: #FFF; } 
+.footer-bottom { padding: 30px 0 40px 0; } 
+.footer-bottom .container { gap: 20px; } 
+.footer-bottom .container { gap: 20px; font-size: 14px; font-weight: 500; line-height: 150%; color: var(--gray-6); } 
+.footer-info__row { gap: 10px; } 

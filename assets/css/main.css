@@ -1,0 +1,115 @@
+
+/*******************************************************
+메인 :: 공통
+*******************************************************/
+.title.flex-btw { padding: 20px 4px; border-bottom: 1px solid var(--gray-5); } 
+
+/*******************************************************
+메인 :: 비주얼 영역
+*******************************************************/
+.visual { position: relative; } 
+.visual .swiper-slide { height: 640px; } 
+.visual-txt-wrap { display: flex; flex-direction: column; gap: 16px; width: 100%; height: 100%; padding: 200px 0 0 150px; color: #fff; } 
+.visual-txt-wrap h1 { font-size: 48px; font-weight: 500; line-height: 140%; } 
+.visual-txt-wrap p { font-size: 24px; font-weight: 300; line-height: 150%; } 
+
+/* 비주얼 컨트롤 */
+.visual-control { display: flex; align-items: center; gap: 16px; position: absolute; left: 150px; bottom: 194px; z-index: 10; } 
+.visual-number { display: flex; gap: 10px; align-items: center; } 
+.visual-number span { font-size: 14px; font-weight: 400; line-height: 1; color: rgba(255, 255, 255, 0.60); } 
+.visual-number .visual-current { color: #fff; } 
+.visual-number i { display: block; width: 1px; height: 10px; background-color: rgba(255, 255, 255, 0.60); } 
+
+/* 프로그래스바 */
+.visual-progress { width: 320px; height: 2px; border-radius: 99px; background: rgba(255, 255, 255, 0.20); } 
+.visual-progress span { display: block; width: 0; height: 100%; border-radius: 99px; background: #fff; } 
+
+
+/*******************************************************
+메인 :: 바로주문 영역
+*******************************************************/
+.sec02 { margin: 60px 0; } 
+.sec02 .container { display: grid; grid-template-columns: 1004fr 376fr; gap: 20px; } 
+.quick-order__menu .quick-order__list { display: flex; gap: 10px; width: 100%; } 
+.quick-order__menu { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px; border-radius: 4px; border: 1px solid #E7E3D9; background: #F8F3E8; } 
+.quick-order__item { display: flex; justify-content: center; align-items: center; gap: 10px; flex: 1 0 0; align-self: stretch; padding: 20px 0; border-radius: 4px; border: 1px solid #E4DED2; background: #FFF; transition: all .3s; } 
+.quick-order__item:hover { border-color: var(--gray-4); background-color: #fafafa; }
+
+.quick-delivery { position: relative; } 
+.quick-delivery__link { gap: 8px; width: 100%; height: 100%; border-radius: 4px; padding: 20px; background: #163C32; } 
+.quick-delivery__title { color: #fff; } 
+.quick-delivery__info { gap: 4px; color: var(--main-color); } 
+.quick-img { position: absolute; right: 0; bottom: 0; } 
+
+/* 바로주문 영역 모달 커스텀 */
+#store-pickup-modal-title,
+#quick-delivery-modal-title { margin-bottom: 30px; } 
+.store-pickup__options { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; } 
+.store-pickup__item { display: flex; flex-direction: column; justify-content: center; align-items: center; flex: 1 0 0; white-space: unset; text-align: center; } 
+.store-pickup__desc {
+    display: block;
+    max-width: 144px;
+    margin-top: 2px;
+    text-align: center;
+}
+.store-pickup__item { gap: 10px; min-height: 150px; padding: 20px 0; border-radius: 4px; border: 1px solid var(--gray-3); background: #FFF; } 
+.store-pickup__notice,
+.store-pickup__notice a { font-size: 14px; font-style: normal; font-weight: 400; line-height: 150%; } 
+.store-pickup__notice { padding: 8px; gap: 10px; border-radius: 4px; background: var(--gray-1); font-size: 14px; font-style: normal; font-weight: 400; line-height: 150%; } 
+.store-pickup__notice a { text-decoration-line: underline; text-decoration-style: solid; text-decoration-skip-ink: auto; text-decoration-thickness: auto; text-underline-offset: auto; text-underline-position: from-font; } 
+.quick-delivery-modal .store-pickup__icon img { width: 32px; height: 32px; }
+
+/*******************************************************
+메인 :: 오늘의 특가
+*******************************************************/
+.time-sale-countdown__group { gap: 4px; } 
+.time-sale-countdown__digit { position: relative; width: 40px; height: 56px; border-radius: 4px; font-size: 36px; font-weight: 700; line-height: 100%; letter-spacing: -0.72px; color: #fff; background: var(--gray-8); } 
+.time-sale-countdown__digit:after { content: ""; display: block; position: absolute; left: 0; bottom: 0; width: 100%; height: 50%; background: linear-gradient(180deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.00) 100%); } 
+.time-sale-countdown__colon { margin: 0 2px; font-size: 32px; font-weight: 800; line-height: 100%; letter-spacing: -0.64px; color: var(--gray-8); } 
+
+
+/*******************************************************
+메인 :: 인기 메뉴
+*******************************************************/
+.event-list { gap: 20px; } 
+
+/*******************************************************
+메인 :: 전라상회 스토리
+*******************************************************/
+.youtube-area { align-items: stretch; gap: 24px; } 
+.youtube-area iframe { display: block; } 
+.youtube-more { justify-content: space-between; height: auto; } 
+.youtube-more a { display: flex; justify-content: center; align-items: center; gap: 10px; align-self: stretch; height: 48px; border-radius: 4px; border: 1px solid #E4DED2; background: #FFF; transition: all .3s; } 
+.youtube-more a:hover { border-color: var(--gray-4); background-color: #fafafa; }
+
+
+/*******************************************************
+메인 :: 브랜드 스토리
+*******************************************************/
+.brand-story-banner {
+    display: flex;
+    align-items: center;
+    padding: 52px 0 52px 76px;
+    color: #fff;
+    background: url(/assets/images/main-brand-story.png);
+    background-position: center right;
+}
+.brand-story-txt-area {
+    gap: 10px;
+}
+.brand-story-txt-area p {
+    gap: 4px;
+}
+
+/*******************************************************
+메인 :: 오시는 길
+*******************************************************/
+.sec08 { margin-bottom: 140px; } 
+.sec08 .map-section__inner { display: grid; grid-template-columns: 1004fr 480fr; gap: 20px; } 
+.map-area.map-section__map { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 64px; padding: 30px; border-radius: 4px; color: #fff; background: #163C32; } 
+.map-area-info h3 { margin-bottom: 8px; } 
+.map-btn-wrap { gap: 10px; } 
+.map-btn-wrap a { display: inline-flex; padding: 6px 10px; justify-content: center; align-items: center; border-radius: 4px; border: 1px solid rgba(255, 255, 255, 0.40); transition: all .3s; } 
+.map-btn-wrap a:hover { background-color: rgba(255, 255, 255, 0.20); }
+.map-addr-area { gap: 6px; } 
+.map-addr { color: #9EB8B1; } 

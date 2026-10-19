@@ -1,0 +1,24 @@
+/* 주문 완료 페이지 */
+#contents:has( .order-result-page) {
+    padding-top: 120px;
+}
+.order-result { display: flex; flex-direction: column; gap: 12px; width: calc(100% - 32px); max-width: 500px; margin: 0 auto; }
+.order-result__complete,
+.order-result__info { border: 1px solid var(--gray-2); border-radius: 4px; background: #fff; }
+.order-result__complete { display: flex; flex-direction: column; align-items: center; padding: 30px 20px; text-align: center; }
+.order-result__icon { width: 40px; height: 40px; margin-bottom: 10px; }
+.order-result__title { margin-bottom: 6px; }
+.order-result__message { margin-bottom: 6px; color: var(--gray-6); }
+.order-result__number { color: var(--gray-6); }
+.order-result__number strong { color: var(--main-color); font-weight: 600; }
+.order-result__actions { gap: 10px; margin-top: 22px; }
+.order-result__info-title { padding: 10px 16px; border-bottom: 1px solid var(--gray-2); }
+.order-result__info-list { display: flex; flex-direction: column; gap: 16px; padding: 20px 16px; }
+.order-result__info-row { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 10px; font-size: 16px; font-weight: 500; line-height: 150%; }
+.order-result__info-row dt { color: var(--gray-6); }
+.order-result__info-row dd { font-weight: 400; color: var(--gray-black); }
+
+@media screen and (max-width: 520px) {
+    .order-result__complete { padding-top: 26px; padding-bottom: 26px; }
+    .order-result__info-row { grid-template-columns: 74px minmax(0, 1fr); font-size: 14px; }
+}

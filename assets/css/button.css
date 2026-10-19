@@ -1,0 +1,33 @@
+/* 버튼 :: 공통 */
+button,
+.btnNormal,
+.btnSubmit { all: unset; box-sizing: border-box; white-space: nowrap; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; border-radius: 4px; transition: all .3s; } 
+
+/* btn :: normal */
+.btnNormal { border: 1px solid var(--gray-3); color: var(--black); background-color: #fff; } 
+
+/* btn :: submit */
+.btnSubmit { border: 1px solid var(--black); color: #fff; background-color: #333; } 
+
+/* 버튼 :: SizeXS */
+.sizeXS { padding: 6px 10px; font-size: 12px; font-weight: 500; line-height: 150%; } 
+
+/* 버튼 :: SizeS */
+.sizeS { padding: 8px 14px; font-size: 14px; font-weight: 600; line-height: 150%; } 
+
+/* 버튼 :: SizeM */
+.sizeM { padding: 10px 24px; font-size: 14px; font-weight: 600; line-height: 150%; } 
+
+/* 버튼 :: SizeL */
+.sizeL { padding: 12px 24px; font-size: 16px; font-weight: 600; line-height: 150%; } 
+
+/* 버튼 :: SizeXL */
+.sizeXL { font-size: 20px; font-weight: 500; line-height: 150%; } 
+
+/* 버튼 :: hover */
+.btnSubmit:hover { background-color: var(--black); } 
+.btnNormal:hover { border: 1px solid var(--gray-4); background-color: #fafafa; } 
+
+/* 버튼 :: disable */
+.btnNormal:disabled,
+.btnSubmit:disabled { border-color: var(--gray-2); color: var(--gray-4); background-color: var(--gray-2); } 

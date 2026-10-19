@@ -1,0 +1,51 @@
+/* input :: 공통 */
+input { all: unset; box-sizing: border-box; display: inline-block; cursor: pointer; } 
+
+/* input :: 체크박스 */
+input[type="checkbox"] { aspect-ratio: 1; width: 24px; height: 24px; border-radius: 2px; border: 1px solid var(--gray-3); background-color: #fff; } 
+input[type="checkbox"]:hover { border-color: #999; } 
+input[type="checkbox"]:checked { border-color: var(--main-color); background-image: url(../icons/input-checkbox-check.svg); background-color: var(--main-color); background-repeat: no-repeat; background-position: center center; } 
+input[type="checkbox"]:disabled { background-color: var(--gray-1); } 
+
+/* input :: 라디오버튼 */
+input[type="radio"] { position: relative; aspect-ratio: 1; width: 24px; height: 24px; border-radius: 100%; border: 1px solid var(--gray-3); background-color: #fff; } 
+input[type="radio"]:hover { border-color: #999; } 
+input[type="radio"]:after { content: ""; display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; border-radius: 100%; background-color: #fff; } 
+input[type="radio"]:checked { border-color: var(--main-color); background-image: url(../icons/input-radio-check.svg); background-color: var(--main-color); background-repeat: no-repeat; background-position: center center; } 
+input[type="radio"]:checked:after { display: block; } 
+input[type="radio"]:disabled { border-color: var(--gray-3); background-color: var(--gray-1); } 
+
+/* input :: 텍스트 */
+input[type="text"],
+input[type="password"],
+input[type="tel"] { display: flex; align-items: center; align-self: stretch; padding: 12px 14px; border-radius: 4px; border: 1px solid var(--gray-3); color: var(--gray-black); background-color: #fff; transition: all .3s; } 
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="tel"]::placeholder { font-size: 14px; font-weight: 400; line-height: 150%; color: var(--gray-5); } 
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="tel"]:hover { border-color: var(--gray-5); } 
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus { border-color: var(--gray-8); } 
+input[type="text"]:disable,
+input[type="password"]:disable,
+input[type="tel"]:disable { background-color: var(--gray-1); } 
+
+
+@media screen and (max-width: 768px) { input[type="text"] { padding: 10px 12px; } 
+ }
+
+
+
+/* select :: 공통 */
+.custom-select { position: relative; cursor: pointer; transition: all .3s; } 
+.custom-select__trigger { all: unset; box-sizing: border-box; display: inline-flex; justify-content: space-between; align-items: center; align-self: stretch; min-width: 100px; padding: 12px 14px; border-radius: 4px; border: 1px solid var(--gray-3-cccccc, #CCC); font-size: 14px; font-style: normal; font-weight: 400; line-height: 150%; color: var(--gray-5); background: #FFF; transition: all .3s; } 
+.custom-select__trigger:hover { border-color: var(--gray-5); } 
+.custom-select.is-open .custom-select__trigger { border-color: var(--gray-7); } 
+.custom-select.is-selected .custom-select__trigger { color: var(--gray-black); } 
+.custom-select__options { overflow-y: auto; position: absolute; left: 0; z-index: 10; transform: translateY(5px); width: 100%; max-height: 250px; padding: 4px 0; border-radius: 4px; border: 1px solid var(--gray-2); background: #FFF; box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.10); scrollbar-width: none; /* Firefox */
+ -ms-overflow-style: none; /* IE, 구형 Edge */}
+.custom-select__options::-webkit-scrollbar { display: none; /* Chrome, Safari */}
+.custom-select__options li button { display: flex; padding: 6px 10px; align-items: center; justify-content: start; width: 100%; border-radius: 0; font-size: 14px; font-style: normal; font-weight: 500; line-height: 150%; transition: all .3s; } 
+.custom-select__options li button:hover { background-color: var(--gray-1); }
