@@ -81,6 +81,10 @@ textarea {
     border: 0;
 }
 
+@media screen and ( max-width: 1400px ) {
+    .container { padding: 0 16px; }
+}
+
 /* modal */
 .common-modal {
     display: none;
@@ -135,6 +139,53 @@ textarea {
 .common-modal__buttons .btnNormal {
     flex: 1;
 }
+.common-modal .dim {
+    z-index: 20;
+}
+
+/* 약관/정책 콘텐츠 모달 */
+.common-modal__container.legal-modal__container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 32px);
+    max-width: 720px;
+    max-height: 80vh;
+    max-height: 80dvh;
+    padding: 0;
+    overflow: hidden;
+}
+.legal-modal__header {
+    flex: 0 0 auto;
+    padding: 24px 64px 20px 24px;
+    border-bottom: 1px solid var(--gray-2);
+}
+.legal-modal__header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 150%;
+}
+.legal-modal__body-wrap {
+    display: flex;
+    min-height: 0;
+    margin: 24px;
+    padding: 25px;
+    border-radius: 8px;
+    background: var(--gray-1);
+}
+.legal-modal__body {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+.legal-modal__body h3 {
+    margin: 24px 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 150%;
+    color: var(--gray-black);
+}
+.legal-modal__body h3:first-child { margin-top: 0; }
+.legal-modal__body p { line-height: 170%; }
 
 /* tabs */
 .common-tabs__list { display: flex; justify-content: center; align-items: center; gap: 10px; padding: 6px; border-radius: 8px; background: var(--gray-1); }
@@ -233,6 +284,7 @@ textarea {
     position: fixed;
     left: 0;
     top: 0;
+    z-index: 500;
     width: 100dvw;
     height: 100dvh;
     background: rgba(0, 0, 0, 0.40);
@@ -493,6 +545,13 @@ textarea {
 /* label */
 label { padding: 0 4px 8px 4px; font-size: 14px; font-style: normal; font-weight: 500; line-height: 150%; }
 
+@media screen and (max-width: 768px) {
+    label {
+        padding: 0 2px 4px 2px;
+        font-size: 12px;
+    }
+}
+
 
 /* 텍스트 색상 */
 .gray-1 {
@@ -528,3 +587,4 @@ label { padding: 0 4px 8px 4px; font-size: 14px; font-style: normal; font-weight
 .red {
     color: var(--red);
 }
+

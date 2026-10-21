@@ -25,18 +25,93 @@ $(function () {
     updateHeaderActive();
 
     // =========================================================
+    // MOBILE CATEGORY MENU
+    // =========================================================
+
+    const $mobileCategoryToggle = $('[data-mobile-category-toggle]');
+    const $mobileCategoryMenu = $('[data-mobile-category-menu]');
+    const $mobileMenuBar = $('.m-menu-bar');
+
+    function setCurrentMobileMenuActive() {
+        const pathname = window.location.pathname.replace(/\/index\.php$/, '/') || '/';
+        let currentMenu = '';
+
+        if (pathname === '/') currentMenu = 'home';
+        else if (pathname.indexOf('/pages/product/') === 0) currentMenu = 'category';
+        else if (pathname === '/pages/order/basket.php') currentMenu = 'cart';
+        else if (pathname.indexOf('/pages/myshop/') === 0) currentMenu = 'myshop';
+
+        $mobileMenuBar.find('[data-mobile-nav]').removeClass('is-active').removeAttr('aria-current');
+
+        if (currentMenu) {
+            $mobileMenuBar.find('[data-mobile-nav="' + currentMenu + '"]')
+                .addClass('is-active')
+                .attr('aria-current', 'page');
+        }
+    }
+
+    setCurrentMobileMenuActive();
+
+    $mobileMenuBar.on('click', '> ul > li > a, > ul > li > button', function () {
+        $mobileMenuBar.find('> ul > li > a, > ul > li > button').removeClass('is-active');
+        $(this).addClass('is-active');
+
+        if (!$(this).is($mobileCategoryToggle) && $mobileCategoryMenu.hasClass('is-open')) {
+            closeMobileCategoryMenu(false);
+        }
+    });
+
+    function openMobileCategoryMenu() {
+        $header.addClass('is-active');
+        $mobileCategoryMenu.addClass('is-open').attr('aria-hidden', 'false').prop('inert', false);
+        $mobileCategoryToggle.attr('aria-expanded', 'true');
+        $('body').addClass('mobile-category-open');
+    }
+
+    function closeMobileCategoryMenu(restoreCurrentMenu = true) {
+        $mobileCategoryMenu.removeClass('is-open').attr('aria-hidden', 'true').prop('inert', true);
+        $mobileCategoryToggle.attr('aria-expanded', 'false');
+        $('body').removeClass('mobile-category-open');
+        if (restoreCurrentMenu) setCurrentMobileMenuActive();
+        updateHeaderActive();
+    }
+
+    $mobileCategoryToggle.on('click', function () {
+        $mobileCategoryMenu.hasClass('is-open') ? closeMobileCategoryMenu() : openMobileCategoryMenu();
+    });
+
+    $mobileCategoryMenu.on('click', '[data-mobile-category-id]', function () {
+        const categoryId = String($(this).attr('data-mobile-category-id'));
+
+        $mobileCategoryMenu.find('[data-mobile-category-id]').removeClass('is-active').attr('aria-selected', 'false');
+        $(this).addClass('is-active').attr('aria-selected', 'true');
+
+        $mobileCategoryMenu.find('[data-mobile-category-panel]')
+            .removeClass('is-active')
+            .prop('hidden', true)
+            .filter('[data-mobile-category-panel="' + categoryId + '"]')
+            .addClass('is-active')
+            .prop('hidden', false);
+    });
+
+    $mobileCategoryMenu.on('click', '[data-mobile-category-close]', closeMobileCategoryMenu);
+
+    // =========================================================
     // HEADER HEIGHT
     // =========================================================
 
     function updateHeaderHeight() {
         const $currentHeader = $('#site-header:visible, .sub-header:visible').first();
         const $currentFooter = $('#site-footer');
+        const $mobileMenuBar = $('.m-menu-bar:visible').first();
 
         const headerHeight = $currentHeader.outerHeight() || 0;
         const footerHeight = $currentFooter.outerHeight() || 0;
+        const mobileMenuBarHeight = $mobileMenuBar.outerHeight() || 0;
 
         document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
         document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
+        document.documentElement.style.setProperty('--m-menu-bar-height', `${mobileMenuBarHeight}px`);
     }
 
     updateHeaderHeight();
@@ -44,6 +119,10 @@ $(function () {
     $window.on('load', updateHeaderHeight);
 
     $window.on('resize', function () {
+        if ($window.width() > 768 && $mobileCategoryMenu.hasClass('is-open')) {
+            closeMobileCategoryMenu();
+        }
+
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(updateHeaderHeight, 100);
     });
@@ -139,12 +218,8 @@ $(function () {
             // 햄버거 메뉴 왼쪽 시작점
             const left = toggleRect.left;
 
-            // 헤더 바로 아래
-            const top = headerRect.bottom;
-
             $megaMenu.css({
-                left: `${left}px`,
-                top: `${top}px`
+                left: `${left}px`
             });
         }
 
@@ -357,6 +432,11 @@ $(function () {
         $searchToggle.trigger('focus');
     });
 
+    $('[data-search-back]').on('click', function () {
+        closeSearchPanel();
+        $searchToggle.trigger('focus');
+    });
+
 
     // =========================================================
     // RECENT SEARCH
@@ -395,6 +475,11 @@ $(function () {
 
     $(document).on('keydown', function (event) {
         if (event.key !== 'Escape') return;
+
+        if ($mobileCategoryMenu.hasClass('is-open')) {
+            closeMobileCategoryMenu();
+            $mobileCategoryToggle.trigger('focus');
+        }
 
         if ($searchPanel.hasClass('is-open')) {
             closeSearchPanel();

@@ -154,7 +154,7 @@ $orderActionKeys = [
                                         <?php if ($order['actions']): ?>
                                             <div class="myshop-order-card__actions" data-order-actions>
                                                 <?php foreach ($order['actions'] as $action): ?>
-                                                    <button type="button" class="<?= $action === '구매 확정' ? 'btnSubmit' : 'btnNormal' ?> sizeS" data-order-action="<?= htmlspecialchars($orderActionKeys[$action] ?? '') ?>"<?= $action === '주문 취소' ? ' data-modal-open="order-cancel-request-modal"' : '' ?>><?= htmlspecialchars($action) ?></button>
+                                                    <button type="button" class="<?= $action === '구매 확정' ? 'btnSubmit' : 'btnNormal' ?> sizeS" data-order-action="<?= htmlspecialchars($orderActionKeys[$action] ?? '') ?>"<?= $action === '주문 취소' ? ' data-modal-open="order-cancel-request-modal"' : '' ?><?= $action === '옵션 변경' ? ' data-option-change-trigger data-modal-open="option-change-modal"' : '' ?>><?= htmlspecialchars($action) ?></button>
                                                 <?php endforeach; ?>
                                             </div>
                                         <?php endif; ?>
@@ -170,5 +170,6 @@ $orderActionKeys = [
 </div>
 
 <?php include __DIR__ . '/../../include/components/modal/order-cancel-request-modal.php'; ?>
+<?php include __DIR__ . '/../../include/components/modal/option-change-modal.php'; ?>
 
 <?php include __DIR__ . '/../../include/components/layout/footer.php'; ?>

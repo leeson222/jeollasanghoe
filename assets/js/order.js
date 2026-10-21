@@ -178,6 +178,167 @@ $(function () {
     renderCalendar();
 });
 
+// 장바구니 선택, 수량 및 결제금액
+$(function () {
+    const $basket = $('[data-basket]');
+    if (!$basket.length) return;
+
+    const formatPrice = value => Number(value || 0).toLocaleString('ko-KR') + '원';
+
+    function updateBasket() {
+        const $items = $basket.find('[data-basket-item]');
+        const $available = $items.not('.is-sold-out');
+        const $selected = $available.filter(function () {
+            return $(this).find('[data-basket-check]').prop('checked');
+        });
+        let total = 0;
+
+        $selected.each(function () {
+            total += Number($(this).attr('data-unit-price')) * Number($(this).find('[data-basket-quantity]').text() || 1);
+        });
+
+        const allSelected = $available.length > 0 && $selected.length === $available.length;
+        const partlySelected = $selected.length > 0 && !allSelected;
+        $basket.find('[data-basket-check-all]').prop('checked', allSelected).prop('indeterminate', partlySelected);
+        $basket.find('[data-basket-subtotal], [data-basket-total]').text(formatPrice(total));
+        $basket.find('[data-basket-selected-count]').text($selected.length);
+        $basket.find('[data-basket-purchase]').toggleClass('is-disabled', !$selected.length).attr('aria-disabled', !$selected.length ? 'true' : 'false');
+        const isEmpty = $items.length === 0;
+        $basket.find('[data-basket-empty]').prop('hidden', !isEmpty);
+        $basket.find('.basket-layout').toggleClass('displaynone', isEmpty);
+    }
+
+    $basket.on('change', '[data-basket-check-all]', function () {
+        $basket.find('[data-basket-check]:not(:disabled)').prop('checked', $(this).prop('checked'));
+        updateBasket();
+    });
+
+    $basket.on('change', '[data-basket-check]', updateBasket);
+
+    $basket.on('click', '[data-basket-minus], [data-basket-plus]', function () {
+        const $item = $(this).closest('[data-basket-item]');
+        const $quantity = $item.find('[data-basket-quantity]');
+        const current = Number($quantity.text()) || 1;
+        const next = Math.max(1, current + ($(this).is('[data-basket-plus]') ? 1 : -1));
+        $quantity.text(next);
+        $item.find('[data-basket-item-price]').text(formatPrice(Number($item.attr('data-unit-price')) * next));
+        updateBasket();
+    });
+
+    $basket.on('click', '[data-basket-remove]', function () {
+        $(this).closest('[data-basket-item]').remove();
+        updateBasket();
+    });
+
+    $basket.on('click', '[data-basket-delete-selected]', function () {
+        $basket.find('[data-basket-check]:checked').closest('[data-basket-item]').remove();
+        updateBasket();
+    });
+
+    $basket.on('click', '[data-basket-purchase].is-disabled', function (event) {
+        event.preventDefault();
+    });
+
+    updateBasket();
+});
+
+// 마이페이지/장바구니 옵션 변경 모달
+$(function () {
+    const $modal = $('#option-change-modal');
+    if (!$modal.length) return;
+
+    let $target = $();
+    let initialState = '';
+
+    function getState() {
+        const values = $modal.find('input[type="hidden"]').map(function () {
+            return $(this).val();
+        }).get();
+        values.push($modal.find('[data-option-change-quantity]').text());
+        return values.join('|');
+    }
+
+    function updateTotal() {
+        const sizePrice = $modal.find('input[name="size"]').val() === 'medium' ? 125000 : 85000;
+        const extraPrice = $modal.find('input[name="extra"]').val() === 'vegetable' ? 3000 : 0;
+        const quantity = Number($modal.find('[data-option-change-quantity]').text()) || 1;
+        $modal.find('[data-option-change-total]').text(((sizePrice + extraPrice) * quantity).toLocaleString('ko-KR') + '원');
+    }
+
+    function updateSubmitState() {
+        $modal.find('[data-option-change-submit]').prop('disabled', getState() === initialState);
+        updateTotal();
+    }
+
+    function resetSelects() {
+        $modal.find('input[type="hidden"][data-initial-value]').each(function () {
+            const $input = $(this);
+            const value = $input.attr('data-initial-value');
+            const $select = $input.closest('.custom-select');
+            const $option = $select.find('[data-value="' + value + '"]').first();
+            const text = $.trim($option.text());
+            const priceMatch = text.match(/^(.*?)(\d{1,3}(?:,\d{3})*원)$/);
+            const $display = $select.find('.custom-select__value');
+
+            $input.val(value);
+            if (priceMatch) {
+                $display.empty().append(document.createTextNode(priceMatch[1])).append($('<em>').text(priceMatch[2]));
+            } else {
+                $display.text(text);
+            }
+            $select.find('[data-value]').removeClass('is-selected').attr('aria-selected', 'false');
+            $option.addClass('is-selected').attr('aria-selected', 'true');
+        });
+    }
+
+    $(document).on('click', '[data-option-change-trigger]', function () {
+        $target = $(this).closest('[data-basket-item]');
+        if (!$target.length) {
+            $target = $(this).closest('[data-myshop-order]').find('[data-order-product]').first();
+        }
+        const name = $target.find('.basket-item__name, [data-product-name]').first().text().trim() || '줄무늬전갱이회';
+        const image = $target.find('.basket-item__thumb img, [data-product-image]').first().attr('src') || '/assets/images/payment-prod-img.png';
+        const quantity = Number($target.find('[data-basket-quantity], [data-product-quantity]').first().text()) || 1;
+
+        resetSelects();
+        $modal.find('[data-option-change-name]').text(name);
+        $modal.find('[data-option-change-image]').attr({ src: image, alt: name });
+        $modal.find('[data-option-change-quantity], [data-option-change-product-quantity]').text(quantity);
+        initialState = getState();
+        updateSubmitState();
+    });
+
+    $modal.on('change', 'input[type="hidden"]', updateSubmitState);
+
+    $modal.on('click', '[data-option-change-minus], [data-option-change-plus]', function () {
+        const $quantity = $modal.find('[data-option-change-quantity]');
+        const current = Number($quantity.text()) || 1;
+        $quantity.text(Math.max(1, current + ($(this).is('[data-option-change-plus]') ? 1 : -1)));
+        updateSubmitState();
+    });
+
+    $modal.on('submit', '[data-option-change-form]', function (event) {
+        event.preventDefault();
+        if ($modal.find('[data-option-change-submit]').prop('disabled')) return;
+
+        const quantity = Number($modal.find('[data-option-change-quantity]').text()) || 1;
+        const sizePrice = $modal.find('input[name="size"]').val() === 'medium' ? 125000 : 85000;
+        const extraPrice = $modal.find('input[name="extra"]').val() === 'vegetable' ? 3000 : 0;
+        const unitPrice = sizePrice + extraPrice;
+
+        if ($target.is('[data-basket-item]')) {
+            $target.attr('data-unit-price', unitPrice);
+            $target.find('[data-basket-quantity]').text(quantity);
+            $target.find('[data-basket-item-price]').text((unitPrice * quantity).toLocaleString('ko-KR') + '원');
+            $target.find('[data-basket-check]').trigger('change');
+        } else {
+            $target.find('[data-product-quantity]').text(quantity);
+        }
+
+        $modal.find('[data-modal-close]').first().trigger('click');
+    });
+});
+
 // 주문 상품 카테고리 활성화
 $(function () {
     $(document).on('click', '.order-products__category [data-category-id]', function () {

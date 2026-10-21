@@ -46,6 +46,11 @@ $(function () {
         $modal.find('.inquiry-write-modal__select .custom-select__value').text('상품을 선택해 주세요');
     });
 
+    // 푸터 등 외부 링크에서 문의 작성 화면으로 바로 진입
+    if (new URLSearchParams(window.location.search).get('write') === '1') {
+        $('[data-inquiry-write]').first().trigger('click');
+    }
+
     $(document).on('click', '[data-inquiry-edit]', function () {
         const $card = $(this).closest('[data-inquiry-item]');
         const $modal = $('#inquiry-write-modal');
@@ -364,5 +369,31 @@ $(function () {
 
     $(document).on('keydown', function (event) {
         if (event.key === 'Escape') closeCalendar();
+    });
+});
+
+// 위시리스트 상품 삭제
+$(function () {
+    let $wishlistTarget = $();
+
+    $(document).on('click', '[data-wishlist-remove]', function () {
+        $wishlistTarget = $(this).closest('.product-card');
+    });
+
+    $(document).on('click', '[data-wishlist-delete-confirm]', function () {
+        if (!$wishlistTarget.length) return;
+
+        const $wishlist = $wishlistTarget.closest('[data-wishlist]');
+        $wishlistTarget.remove();
+        $wishlistTarget = $();
+
+        if (!$wishlist.find('.product-card').length) {
+            $wishlist.find('[data-wishlist-products]').addClass('displaynone');
+            $wishlist.find('[data-wishlist-empty]').prop('hidden', false);
+        }
+    });
+
+    $(document).on('click', '#wishlist-delete-modal [data-modal-close]', function () {
+        if (!$(this).is('[data-wishlist-delete-confirm]')) $wishlistTarget = $();
     });
 });

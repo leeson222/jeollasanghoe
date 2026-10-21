@@ -23,9 +23,13 @@
         </div>
 
         <div class="site-header__utility flex">
-            <button class="site-header__search-toggle" type="button" aria-expanded="false" aria-controls="header-search-panel" data-search-toggle>
+            <button class="site-header__search-toggle search-btn" type="button" aria-expanded="false" aria-controls="header-search-panel" data-search-toggle>
                 <span class="site-header__search-label">검색</span>
                 <span class="site-header__search-icon" aria-hidden="true"><img src="/assets/icons/h-search-ico.svg" alt=""><img src="/assets/icons/h-search-ico-active.svg" alt="" hidden></span>
+            </button>
+            <button class="site-header__search-toggle m-search-btn displaynone" type="button" aria-expanded="false" aria-controls="header-search-panel" data-search-toggle>
+                <img src="/assets/icons/m-search-ico.svg" alt="" class="m-search-btn-ico">
+                <img src="/assets/icons/m-search-ico-hover.svg" alt="" class="m-search-btn-ico-hover">
             </button>
 
             <div class="site-header__actions flex">
@@ -40,7 +44,7 @@
                 <nav class="site-header__user-menu site-header__user-menu--member flex" aria-label="회원 메뉴" >
                     <a href="#">로그아웃</a>
                     <a href="/pages/myshop/index.php">마이페이지</a>
-                    <a href="#">장바구니 <span class="site-header__cart-count" aria-label="담긴 상품 0개">99+</span></a>
+                    <a href="/pages/order/basket.php">장바구니 <span class="site-header__cart-count" aria-label="담긴 상품 0개">99+</span></a>
                 </nav>
             </div>
         </div>
@@ -48,10 +52,79 @@
     <?php include __DIR__ . '/mega-menu.php'; ?>
 </header>
 
+<div class="m-menu-bar displaynone">
+    <ul>
+        <li>
+            <button type="button" data-mobile-nav="category" data-mobile-category-toggle aria-expanded="false" aria-controls="mobile-category-menu">
+                <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-cate-ico.svg" alt="">
+                <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-cate-ico-active.svg" alt="">
+                <span>카테고리</span>
+            </button>
+        </li>
+        <li>
+            <a href="#quick-delivery-fee-modal" data-mobile-nav="quick" data-modal-open="quick-delivery-fee-modal">
+                <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-quick-ico.svg" alt="">
+                <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-quick-ico-active.svg" alt="">
+                <span>퀵배송조회</span>
+            </a>
+        </li>
+        <li>
+            <a href="/" class="is-active" aria-current="page" data-mobile-nav="home">
+                <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-home-ico.svg" alt="">
+                <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-home-ico-active.svg" alt="">
+                <span>홈</span>
+            </a>
+        </li>
+        <li>
+            <a href="/pages/order/basket.php" data-mobile-nav="cart">
+                <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-cart-ico.svg" alt="">
+                <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-cart-ico-active.svg" alt="">
+                <span>장바구니</span>
+            </a>
+        </li>
+        <li>
+            <a href="/pages/myshop/index.php" data-mobile-nav="myshop">
+                <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-myshop-ico.svg" alt="">
+                <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-myshop-ico-active.svg" alt="">
+                <span>마이</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="m-menu-cate displaynone" id="mobile-category-menu" data-mobile-category-menu aria-hidden="true" inert>
+    <div class="m-menu-cate__dim" data-mobile-category-close></div>
+    <nav class="m-menu-cate__inner" aria-label="모바일 상품 카테고리">
+        <div class="m-menu-cate__primary">
+            <ul class="m-menu-cate__primary-list">
+                <?php foreach ($megaMenuCategories as $index => $category): ?>
+                    <li><button type="button" class="m-menu-cate__primary-button<?= $index === 0 ? ' is-active' : '' ?>" data-mobile-category-id="<?= htmlspecialchars($category['id']) ?>" aria-selected="<?= $index === 0 ? 'true' : 'false' ?>"><?= htmlspecialchars($category['name']) ?></button></li>
+                <?php endforeach; ?>
+            </ul>
+            <ul class="m-menu-cate__utility">
+                <li><a href="#">로그아웃</a></li>
+                <li><a href="/pages/sub/store-guide.php">매장안내</a></li>
+                <li><a href="/pages/sub/customer-center.php">고객센터</a></li>
+            </ul>
+        </div>
+
+        <div class="m-menu-cate__secondary">
+            <?php foreach ($megaMenuCategories as $index => $category): ?>
+                <ul class="m-menu-cate__secondary-list<?= $index === 0 ? ' is-active' : '' ?>" data-mobile-category-panel="<?= htmlspecialchars($category['id']) ?>"<?= $index === 0 ? '' : ' hidden' ?>>
+                    <li><a href="/pages/product/products.php?category=<?= urlencode($category['id']) ?>">전체</a></li>
+                    <?php foreach ($category['items'] as $item): ?>
+                        <li><a href="/pages/product/products.php?category=<?= urlencode($category['id']) ?>&amp;item=<?= urlencode($item['id']) ?>"><?= htmlspecialchars($item['name']) ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endforeach; ?>
+        </div>
+    </nav>
+</div>
+
 <section class="search-panel" id="header-search-panel" aria-label="상품 검색" aria-hidden="true" data-search-panel inert>
     <div class="search-panel-wrap">
         <div class="search-panel__inner">
-            <div class="back-btn displaynone"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 12H4" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 6L4 12L10 18" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <button type="button" class="back-btn displaynone" aria-label="검색 닫기" data-search-back><img src="/assets/icons/search-panner-back-ico.svg" alt=""></button>
             <form class="search-panel__form" action="#" method="get" role="search">
                 <label class="sr-only" for="header-search-keyword">상품 검색어</label>
                 <input class="search-panel__input" id="header-search-keyword" name="keyword" type="search" placeholder="검색어를 입력해 주세요" autocomplete="off">

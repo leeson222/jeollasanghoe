@@ -10,27 +10,27 @@
             <nav class="footer-menu">
                 <ul class="footer-menu__list flex">
                     <li class="footer-menu__item">
-                        <a href="#" class="footer-menu__link Body-XXXS1 gray-7">회사소개</a>
+                        <a href="/pages/sub/brand-story.php" class="footer-menu__link Body-XXXS1 gray-7">회사소개</a>
                     </li>
                     <li class="footer-menu__item">
-                        <a href="#" class="footer-menu__link Body-XXXS1 gray-7">이용약관</a>
+                        <a href="#terms-modal" class="footer-menu__link Body-XXXS1 gray-7" data-modal-open="terms-modal" aria-haspopup="dialog" aria-controls="terms-modal">이용약관</a>
                     </li>
                     <li class="footer-menu__item">
-                        <a href="#" class="footer-menu__link Body-XXXS1 gray-7">개인정보처리방침</a>
+                        <a href="#privacy-modal" class="footer-menu__link Body-XXXS1 gray-7" data-modal-open="privacy-modal" aria-haspopup="dialog" aria-controls="privacy-modal">개인정보처리방침</a>
                     </li>
                     <li class="footer-menu__item">
-                        <a href="#" class="footer-menu__link Body-XXXS1 gray-7">고객센터</a>
+                        <a href="/pages/sub/faq.php" class="footer-menu__link Body-XXXS1 gray-7">고객센터</a>
                     </li>
                 </ul>
             </nav>
 
             <div class="footer-utils flex">
-                <a href="#" class="footer-benefit Body-XXXS1 gray-6">회원혜택 안내</a>
+                <p class="footer-benefit Body-XXXS1 gray-6">회원혜택 안내</p>
 
                 <div class="footer-sns flex">
-                    <a href="#" class="footer-sns__link Body-XXXS1 gray-6">문의하기</a>
+                    <a href="/pages/myshop/inquiries.php?write=1" class="footer-sns__link Body-XXXS1 gray-6">문의하기</a>
                     <a href="#" class="footer-sns__link Body-XXXS1 gray-6">Instagram</a>
-                    <a href="#" class="footer-sns__link Body-XXXS1 gray-6">Youtube</a>
+                    <a href="https://www.youtube.com/@%EC%83%9D%EC%84%A0%EC%9D%98%EB%AA%85%EC%88%98/videos" class="footer-sns__link Body-XXXS1 gray-6" target="_blank">Youtube</a>
                 </div>
             </div>
         </div>
@@ -67,5 +67,6 @@
         </div>
     </div>
 </footer>
+<?php include __DIR__ . '/../modal/legal-modal.php'; ?>
 </body>
 </html>

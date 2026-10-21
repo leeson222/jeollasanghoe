@@ -39,11 +39,11 @@
 
             <div class="product-card__badges flex-d">
                 <?php if (!empty($product['best'])): ?>
-                    <span class="product-card__badge is-best flex"><img src="/assets/icons/badge-best-ico.svg" alt="best"></span>
+                    <span class="product-card__badge is-best">BEST</span>
                 <?php endif; ?>
 
                 <?php if (!empty($product['new'])): ?>
-                    <span class="product-card__badge is-new flex"><img src="/assets/icons/badge-new-ico.svg" alt="new"></span>
+                    <span class="product-card__badge is-new">NEW</span>
                 <?php endif; ?>
 
                 <span class="product-card__view flex">
@@ -53,4 +53,9 @@
 
         </div>
     </a>
+    <?php if (($productCardContext ?? '') === 'wishlist'): ?>
+        <button type="button" class="product-card__wishlist" data-wishlist-remove data-modal-open="wishlist-delete-modal" aria-label="<?= htmlspecialchars($product['name'] ?? '', ENT_QUOTES) ?> 위시리스트에서 삭제" aria-haspopup="dialog" aria-controls="wishlist-delete-modal">
+            <img src="/assets/icons/prod-wishlist-like-ico.svg" alt="">
+        </button>
+    <?php endif; ?>
 </article>

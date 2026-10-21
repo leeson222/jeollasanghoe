@@ -24,8 +24,8 @@ $notices = [
             <h1 class="Body-M2">공지사항</h1>
             <div class="notice-board" role="list">
                 <div class="notice-board__head" aria-hidden="true"><span>번호</span><span>제목</span><span>등록일</span></div>
-                <?php foreach ($notices as $notice): ?>
-                    <a href="#" class="notice-board__item<?= !empty($notice['fixed']) ? ' is-fixed' : '' ?>" role="listitem">
+                <?php foreach ($notices as $index => $notice): ?>
+                    <a href="/pages/sub/read.php?id=<?= $index + 1 ?>" class="notice-board__item<?= !empty($notice['fixed']) ? ' is-fixed' : '' ?>" role="listitem">
                         <span class="notice-board__number"><?php if (!empty($notice['fixed'])): ?><em>공지</em><?php else: ?><?= (int)$notice['number'] ?><?php endif; ?></span>
                         <strong class="notice-board__subject"><?= htmlspecialchars($notice['title']) ?></strong>
                         <time datetime="<?= str_replace('.', '-', $notice['date']) ?>"><?= htmlspecialchars($notice['date']) ?></time>

@@ -145,6 +145,44 @@
 
 /*************************** 포인트 관리 ***************************/
 .myshop-page__title { margin-bottom: 20px; } 
+
+/* 위시리스트 */
+.myshop-wishlist .product-list { column-gap: 16px; row-gap: 60px; }
+.myshop-wishlist .product-card { position: relative; min-width: 0; }
+.product-card__wishlist {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+}
+.product-card__wishlist img { display: block; width: 100%; height: 100%; }
+.myshop-wishlist__pagination { margin-top: 30px; }
+.myshop-wishlist__empty { display: flex; min-height: 430px; flex-direction: column; justify-content: center; align-items: center; gap: 24px; color: var(--gray-5); }
+.myshop-wishlist__empty[hidden] { display: none; }
+.wishlist-delete-modal__container { max-width: 420px; }
+
+.myshop-wishlist .product-card__name {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 150%;
+}
+.myshop-wishlist .product-card__desc {
+    font-size: 14px;
+    line-height: 150%;
+}
+.myshop-wishlist .product-card__price strong {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
+@media screen and (max-width: 768px) {
+    .myshop-wishlist .product-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 12px; }
+    .product-card__wishlist { top: 8px; right: 8px; }
+}
 .myshop-point-summary { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; padding: 30px; border-radius: 4px; background: var(--gray-1); } 
 .myshop-point-summary dd { font-size: 32px; font-weight: 600; line-height: 150%; /* 48px */
  letter-spacing: -0.64px; color: #006AFF; } 

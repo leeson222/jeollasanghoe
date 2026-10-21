@@ -5,7 +5,8 @@ input { all: unset; box-sizing: border-box; display: inline-block; cursor: point
 input[type="checkbox"] { aspect-ratio: 1; width: 24px; height: 24px; border-radius: 2px; border: 1px solid var(--gray-3); background-color: #fff; } 
 input[type="checkbox"]:hover { border-color: #999; } 
 input[type="checkbox"]:checked { border-color: var(--main-color); background-image: url(../icons/input-checkbox-check.svg); background-color: var(--main-color); background-repeat: no-repeat; background-position: center center; } 
-input[type="checkbox"]:disabled { background-color: var(--gray-1); } 
+input[type="checkbox"]:disabled { background-color: var(--gray-1); pointer-events: none; cursor: default;} 
+input[type="checkbox"]:disabled:hover { border-color: var(--gray-3); background-color: var(--gray-1); }
 
 /* input :: 라디오버튼 */
 input[type="radio"] { position: relative; aspect-ratio: 1; width: 24px; height: 24px; border-radius: 100%; border: 1px solid var(--gray-3); background-color: #fff; } 
@@ -33,8 +34,13 @@ input[type="password"]:disable,
 input[type="tel"]:disable { background-color: var(--gray-1); } 
 
 
-@media screen and (max-width: 768px) { input[type="text"] { padding: 10px 12px; } 
- }
+@media screen and (max-width: 768px) {
+    input[type="text"] {
+        padding: 10px 12px;
+        font-size: 14px;
+    } 
+
+}
 
 
 
@@ -49,3 +55,9 @@ input[type="tel"]:disable { background-color: var(--gray-1); }
 .custom-select__options::-webkit-scrollbar { display: none; /* Chrome, Safari */}
 .custom-select__options li button { display: flex; padding: 6px 10px; align-items: center; justify-content: start; width: 100%; border-radius: 0; font-size: 14px; font-style: normal; font-weight: 500; line-height: 150%; transition: all .3s; } 
 .custom-select__options li button:hover { background-color: var(--gray-1); }
+
+@media screen and (max-width: 768px) {
+    .custom-select__trigger {
+        padding: 10px 12px;
+    }
+}

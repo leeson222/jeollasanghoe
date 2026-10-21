@@ -97,7 +97,7 @@
                 </div>
 
                 <div class="quick-delivery fadeInUp">
-                    <a href="" class="quick-delivery__link flex-c">
+                    <a href="#quick-delivery-fee-modal" class="quick-delivery__link flex-c" data-modal-open="quick-delivery-fee-modal" aria-haspopup="dialog" aria-controls="quick-delivery-fee-modal">
                         <h2 class="Body-S3 quick-delivery__title">
                             우리집까지 배송비를 확인해보세요
                         </h2>
@@ -302,13 +302,15 @@
                 <div class="event-list flex">
                     <a href="#" class="event-card flex fadeInUp delay02">
                         <figure class="event-card__thumb flex">
-                            <img src="/assets/images/event-img01.png" alt="이벤트명">
+                            <img class="event-card-pc" src="/assets/images/event-img01.png" alt="이벤트명">
+                            <img class="event-card-mo" src="/assets/images/event-img01-m.png" alt="이벤트명">
                         </figure>
                     </a>
 
                     <a href="#" class="event-card flex fadeInUp delay02">
                         <figure class="event-card__thumb flex">
-                            <img src="/assets/images/event-img02.png" alt="이벤트명">
+                            <img class="event-card-pc" src="/assets/images/event-img02.png" alt="이벤트명">
+                            <img class="event-card-mo" src="/assets/images/event-img02-m.png" alt="이벤트명">
                         </figure>
                     </a>
                 </div>
@@ -375,6 +377,7 @@
     <?php include __DIR__ . '/include/components/modal/guest-order-modal.php'; ?>
     <?php include __DIR__ . '/include/components/modal/store-pickup-modal.php'; ?>
     <?php include __DIR__ . '/include/components/modal/quick-delivery-modal.php'; ?>
+    <?php include __DIR__ . '/include/components/modal/quick-delivery-fee-modal.php'; ?>
     
     <!-- footer -->
     <?php include __DIR__ . '/include/components/layout/footer.php'; ?>

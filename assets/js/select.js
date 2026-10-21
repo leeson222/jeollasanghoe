@@ -35,8 +35,14 @@ $(function () {
         const $select = $option.closest(selector);
         const value = $option.attr('data-value');
         const text = $.trim($option.text());
+        const priceMatch = text.match(/^(.*?)(\d{1,3}(?:,\d{3})*원)$/);
+        const $value = $select.find('.custom-select__value');
 
-        $select.find('.custom-select__value').text(text);
+        if ($select.hasClass('option-change-modal__select') && priceMatch) {
+            $value.empty().append(document.createTextNode(priceMatch[1])).append($('<em>').text(priceMatch[2]));
+        } else {
+            $value.text(text);
+        }
         $select.find('input[type="hidden"]').val(value).trigger('change');
 
         // 선택 완료 클래스

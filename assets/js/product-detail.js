@@ -222,6 +222,22 @@ $(document).on('click', '[data-detail-more]', function () {
 });
 
 
+// 상품 좋아요 토글
+$(document).on('click', '[data-product-like]', function () {
+    var $button = $(this);
+    var isLiked = $button.attr('aria-pressed') === 'true';
+    var nextLiked = !isLiked;
+
+    $button
+        .attr('aria-pressed', String(nextLiked))
+        .attr('aria-label', nextLiked ? '찜 해제' : '찜하기')
+        .find('img')
+        .attr('src', nextLiked
+            ? '/assets/icons/prod-info-like-ico-clicked.svg'
+            : '/assets/icons/prod-info-like-ico.svg');
+});
+
+
 
 // 상품문의 토글
 

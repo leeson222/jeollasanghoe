@@ -6,6 +6,7 @@ $myshopMenus = [
     ['file' => 'addresses.php', 'label' => '배송지 관리'],
     ['file' => 'points.php', 'label' => '포인트 관리'],
     ['file' => 'coupons.php', 'label' => '쿠폰 관리'],
+    ['file' => 'wishlist.php', 'label' => '위시리스트'],
     ['file' => 'reviews.php', 'label' => '리뷰 관리'],
     ['file' => 'inquiries.php', 'label' => '문의 관리'],
     ['file' => 'profile.php', 'label' => '내 정보 수정'],

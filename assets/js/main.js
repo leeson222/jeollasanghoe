@@ -89,3 +89,14 @@ $(function () {
         }
     );
 });
+
+// 퀵 배송비 조회 (퍼블리싱용 더미 금액)
+$(function () {
+    $(document).on('submit', '[data-quick-delivery-fee-form]', function (event) {
+        event.preventDefault();
+
+        $(this).closest('#quick-delivery-fee-modal').find('[data-quick-delivery-fee]').each(function () {
+            $(this).text($(this).attr('data-quick-delivery-fee'));
+        });
+    });
+});
