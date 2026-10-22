@@ -238,39 +238,6 @@ $(function () {
         }
     }
 
-    function paymentMonthItemStep($list) {
-        const itemHeight = $list.children('[data-month]').first().outerHeight() || 0;
-        const itemGap = parseFloat(window.getComputedStyle($list[0]).rowGap) || 0;
-        return itemHeight + itemGap;
-    }
-
-    function activatePaymentCenteredMonth() {
-        const $list = $('#month-select-sheet [data-month-list]');
-        const step = paymentMonthItemStep($list);
-        if (!step) return;
-        const index = Math.max(0, Math.min(
-            $list.children('[data-month]').length - 1,
-            Math.round($list.scrollTop() / step)
-        ));
-
-        $list.children('[data-month]')
-            .removeClass('is-selected')
-            .attr('aria-pressed', 'false')
-            .eq(index)
-            .addClass('is-selected')
-            .attr('aria-pressed', 'true');
-    }
-
-    function centerPaymentSelectedMonth(behavior = 'auto') {
-        const $list = $('#month-select-sheet [data-month-list]');
-        const selectedIndex = $list.children('[data-month].is-selected').index();
-        if (selectedIndex < 0) return;
-        $list[0].scrollTo({
-            top: selectedIndex * paymentMonthItemStep($list),
-            behavior
-        });
-    }
-
     function renderPaymentMonthList() {
         const $list = $('#month-select-sheet [data-month-list]');
         const currentMonth = startOfMonth(new Date());
@@ -283,58 +250,11 @@ $(function () {
             html += `<button type="button" class="month-select__item${isSelected ? ' is-selected' : ''}" data-month="${value}" aria-pressed="${isSelected}">${optionDate.getFullYear()}년 ${optionDate.getMonth() + 1}월</button>`;
         }
 
-        $list.html(html)
-            .off('scroll.monthPicker')
-            .on('scroll.monthPicker', activatePaymentCenteredMonth);
+        $list.html(html);
+        $(document).trigger('month-picker:refresh', [$list]);
     }
 
     $(document).on('click', '[data-delivery-calendar-month-open]', renderPaymentMonthList);
-
-    $(document).on('month-picker:open', function () {
-        window.requestAnimationFrame(function () {
-            centerPaymentSelectedMonth();
-        });
-    });
-
-    let paymentMonthDragged = false;
-
-    $(document).on('click', '#month-select-sheet [data-month]', function (event) {
-        if (paymentMonthDragged) {
-            event.preventDefault();
-            paymentMonthDragged = false;
-            return;
-        }
-        const $list = $(this).closest('[data-month-list]');
-        $list[0].scrollTo({
-            top: $(this).index() * paymentMonthItemStep($list),
-            behavior: 'smooth'
-        });
-    });
-
-    let paymentMonthDragStartY = 0;
-    let paymentMonthDragStartScroll = 0;
-
-    $(document).on('pointerdown', '#month-select-sheet [data-month-list]', function (event) {
-        if (event.originalEvent.pointerType !== 'mouse') return;
-        paymentMonthDragStartY = event.originalEvent.clientY;
-        paymentMonthDragStartScroll = this.scrollTop;
-        paymentMonthDragged = false;
-        this.setPointerCapture(event.originalEvent.pointerId);
-        $(this).addClass('is-dragging');
-    });
-
-    $(document).on('pointermove', '#month-select-sheet [data-month-list].is-dragging', function (event) {
-        if (Math.abs(paymentMonthDragStartY - event.originalEvent.clientY) > 3) paymentMonthDragged = true;
-        this.scrollTop = paymentMonthDragStartScroll + paymentMonthDragStartY - event.originalEvent.clientY;
-    });
-
-    $(document).on('pointerup pointercancel', '#month-select-sheet [data-month-list].is-dragging', function () {
-        $(this).removeClass('is-dragging');
-        const $list = $(this);
-        const step = paymentMonthItemStep($list);
-        const index = Math.round(this.scrollTop / step);
-        this.scrollTo({ top: index * step, behavior: 'smooth' });
-    });
 
     $(document).on('click', '#month-select-sheet [data-action="select-month"]', function () {
         const value = $('#month-select-sheet [data-month-list] .is-selected').attr('data-month');

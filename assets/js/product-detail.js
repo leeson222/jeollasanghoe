@@ -73,9 +73,15 @@ $(function () {
         $mobileBar.find('.product-purchase-mobile-bar__total').prop('hidden', totalAmount <= 0);
 
         window.requestAnimationFrame(function () {
+            const mobileBarHeight = $mobileBar.outerHeight();
+
             document.documentElement.style.setProperty(
                 '--product-purchase-mobile-bar-height',
-                $mobileBar.outerHeight() + 'px'
+                mobileBarHeight + 'px'
+            );
+            document.documentElement.style.setProperty(
+                '--mobile-bottom-sticky-height',
+                mobileBarHeight + 'px'
             );
         });
     }

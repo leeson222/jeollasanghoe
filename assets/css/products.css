@@ -94,6 +94,16 @@
 .inquiry-write-modal__footer { flex: none; padding: 40px 20px 20px; background: #fff; }
 .inquiry-write-modal__footer button { width: 100%; }
 
+@media screen and (max-width: 1280px) {
+    /* 상품 리스트 */
+    .products-page__layout {
+        gap: 40px;
+    }
+    .products-page .product-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
 @media screen and (max-width: 1024px) {
     .products-page__layout { display: block; }
     .products-page .product-lnb { display: none; }

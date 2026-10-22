@@ -223,7 +223,7 @@ input[type="search"]::-webkit-search-cancel-button { appearance: none; -webkit-a
 
     /* 헤더 레이아웃 */
     #site-header .site-header__inner {
-        padding: 9px 0;
+        padding: 9px 20px;
     }
 
     /* gnb */
@@ -328,6 +328,7 @@ input[type="search"]::-webkit-search-cancel-button { appearance: none; -webkit-a
 @media screen and (max-width: 768px) {
     body { padding-bottom: var(--m-menu-bar-height, 64px); }
     body:has(.bottom-sheet, .order-product-modal, .product-purchase-sheet) { padding-bottom: 0; }
+    body:has(.order-summary-mobile-bar, .product-purchase-mobile-bar, .payment-mobile-sticky) #site-footer { padding-bottom: var(--mobile-bottom-sticky-height, 0px); }
     body.mobile-category-open { overflow: hidden; }
 
     /* 서치 패널 */

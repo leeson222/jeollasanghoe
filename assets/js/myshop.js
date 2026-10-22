@@ -1,6 +1,58 @@
 $(function () {
     let inquiryFiles = [];
 
+    const $myshopDashboard = $('[data-myshop-dashboard]');
+
+    if ($myshopDashboard.length) {
+        const mobileDashboardQuery = window.matchMedia('(max-width: 1024px)');
+        const $myshopHomeLink = $('[data-myshop-home-link]');
+        const $myshopHomeItem = $myshopHomeLink.closest('.myshop-menu__item');
+
+        function setMyshopHomeView(isHomeView) {
+            const useHomeView = mobileDashboardQuery.matches && isHomeView;
+            const activateHomeMenu = mobileDashboardQuery.matches ? useHomeView : true;
+
+            $myshopDashboard.toggleClass('is-home-view', useHomeView);
+            $myshopHomeItem.toggleClass('is-active', activateHomeMenu);
+
+            if (activateHomeMenu) {
+                $myshopHomeLink.attr('aria-current', 'page');
+            } else {
+                $myshopHomeLink.removeAttr('aria-current');
+            }
+
+            $(window).trigger('resize');
+        }
+
+        setMyshopHomeView(false);
+
+        $myshopHomeLink.on('click', function (event) {
+            if (!mobileDashboardQuery.matches) return;
+
+            event.preventDefault();
+            if ($myshopDashboard.hasClass('is-home-view')) return;
+
+            window.history.pushState({ myshopHomeView: true }, '', window.location.href);
+            setMyshopHomeView(true);
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        });
+
+        $(window).on('popstate.myshopDashboard', function (event) {
+            const historyState = event.originalEvent.state;
+            setMyshopHomeView(Boolean(historyState && historyState.myshopHomeView));
+        });
+
+        const handleDashboardBreakpointChange = function () {
+            setMyshopHomeView($myshopDashboard.hasClass('is-home-view'));
+        };
+
+        if (mobileDashboardQuery.addEventListener) {
+            mobileDashboardQuery.addEventListener('change', handleDashboardBreakpointChange);
+        } else {
+            mobileDashboardQuery.addListener(handleDashboardBreakpointChange);
+        }
+    }
+
     $(document).on('submit', '[data-profile-password-form]', function (event) {
         event.preventDefault();
         const $form = $(this);
@@ -149,9 +201,28 @@ $(function () {
     });
 
     $(document).on('click', '[data-review-write], [data-review-edit]', function () {
-        const isEdit = $(this).is('[data-review-edit]');
+        const $trigger = $(this);
+        const isEdit = $trigger.is('[data-review-edit]');
+        const $reviewCard = $trigger.closest('.myshop-review-card');
+        const $order = $trigger.closest('[data-myshop-order]');
+        const $product = $reviewCard.length
+            ? $reviewCard
+            : $order.find('[data-order-product]').first();
+        const productName = $product.find('[data-product-name]').first().text().trim();
+        const $productImage = $product.find('[data-product-image], .myshop-review-card__product-image img').first();
+        const productImage = $productImage.attr('src');
+        const $modal = $('#review-write-modal');
+
         $('#review-write-modal-title').text(isEdit ? '리뷰 수정' : '리뷰 작성');
         $('[data-review-submit]').text(isEdit ? '수정' : '등록');
+
+        if (productName) $modal.find('[data-review-product-name]').text(productName);
+        if (productImage) {
+            $modal.find('[data-review-product-image]').attr({
+                src: productImage,
+                alt: productName
+            });
+        }
     });
 
     $(document).on('click', '[data-review-control]', function () {
@@ -253,6 +324,29 @@ $(function () {
     let $activeInput = $();
     let viewDate = new Date();
 
+    function syncPeriodSummary($filter) {
+        const $activePreset = $filter.find('[data-period-months].is-active').first();
+        const $start = $filter.find('[data-period-start]').first();
+        const $end = $filter.find('[data-period-end]').first();
+
+        $filter.find('[data-period-summary-months]').text($activePreset.text().trim() || '기간 설정');
+        $filter.find('[data-period-summary-start]').text($start.val());
+        $filter.find('[data-period-summary-end]').text($end.val());
+    }
+
+    $('[data-period-mobile-toggle]').on('click', function () {
+        const $toggle = $(this);
+        const $filter = $toggle.closest('[data-myshop-period-filter]');
+        const willOpen = !$filter.hasClass('is-open');
+
+        $filter.toggleClass('is-open', willOpen);
+        $toggle.attr('aria-expanded', String(willOpen));
+    });
+
+    $('[data-myshop-period-filter]').each(function () {
+        syncPeriodSummary($(this));
+    });
+
     function parseDate(value) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return null;
         const parts = value.split('-').map(Number);
@@ -338,6 +432,7 @@ $(function () {
         $preset.addClass('is-active').siblings('[data-period-months]').removeClass('is-active');
         $periodStart.val(formatDate(startDate));
         $periodEnd.val(formatDate(endDate));
+        syncPeriodSummary($preset.closest('[data-myshop-period-filter]'));
 
         if (!$calendar.prop('hidden') && $activeInput.length) {
             const activeDate = parseDate($activeInput.val()) || endDate;
@@ -348,6 +443,7 @@ $(function () {
 
     $dateInputs.on('change', function () {
         $periodPresets.removeClass('is-active');
+        syncPeriodSummary($(this).closest('[data-myshop-period-filter]'));
     });
 
     $calendar.on('click', '[data-calendar-prev], [data-calendar-next]', function () {

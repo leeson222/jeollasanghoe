@@ -1,4 +1,86 @@
 
+// 공통 년월 선택 바텀시트 인터랙션
+$(function () {
+    const listSelector = '#month-select-sheet [data-month-list]';
+    let dragged = false;
+    let dragStartY = 0;
+    let dragStartScroll = 0;
+
+    function itemStep($list) {
+        if (!$list.length) return 0;
+        const itemHeight = $list.children('[data-month]').first().outerHeight() || 0;
+        const itemGap = parseFloat(window.getComputedStyle($list[0]).rowGap) || 0;
+        return itemHeight + itemGap;
+    }
+
+    function activateCenteredItem($list) {
+        const step = itemStep($list);
+        if (!step) return;
+        const index = Math.max(0, Math.min(
+            $list.children('[data-month]').length - 1,
+            Math.round($list.scrollTop() / step)
+        ));
+
+        $list.children('[data-month]')
+            .removeClass('is-selected')
+            .attr('aria-pressed', 'false')
+            .eq(index)
+            .addClass('is-selected')
+            .attr('aria-pressed', 'true');
+    }
+
+    function centerSelectedItem($list, behavior = 'auto') {
+        const step = itemStep($list);
+        const selectedIndex = $list.children('[data-month].is-selected').index();
+        if (!step || selectedIndex < 0) return;
+        $list[0].scrollTo({ top: selectedIndex * step, behavior });
+    }
+
+    $(document)
+        .off('.commonMonthPicker')
+        .on('month-picker:refresh.commonMonthPicker', function (event, $targetList) {
+            const $list = $targetList && $targetList.length ? $targetList : $(listSelector);
+            $list.off('scroll.commonMonthPicker').on('scroll.commonMonthPicker', function () {
+                activateCenteredItem($(this));
+            });
+        })
+        .on('month-picker:open.commonMonthPicker', function () {
+            window.requestAnimationFrame(function () {
+                centerSelectedItem($(listSelector));
+            });
+        })
+        .on('click.commonMonthPicker', listSelector + ' [data-month]', function (event) {
+            if (dragged) {
+                event.preventDefault();
+                dragged = false;
+                return;
+            }
+            const $list = $(this).closest('[data-month-list]');
+            $list[0].scrollTo({
+                top: $(this).index() * itemStep($list),
+                behavior: 'smooth'
+            });
+        })
+        .on('pointerdown.commonMonthPicker', listSelector, function (event) {
+            if (event.originalEvent.pointerType !== 'mouse') return;
+            dragStartY = event.originalEvent.clientY;
+            dragStartScroll = this.scrollTop;
+            dragged = false;
+            this.setPointerCapture(event.originalEvent.pointerId);
+            $(this).addClass('is-dragging');
+        })
+        .on('pointermove.commonMonthPicker', listSelector + '.is-dragging', function (event) {
+            if (Math.abs(dragStartY - event.originalEvent.clientY) > 3) dragged = true;
+            this.scrollTop = dragStartScroll + dragStartY - event.originalEvent.clientY;
+        })
+        .on('pointerup.commonMonthPicker pointercancel.commonMonthPicker', listSelector + '.is-dragging', function () {
+            const $list = $(this).removeClass('is-dragging');
+            const step = itemStep($list);
+            if (!step) return;
+            this.scrollTo({ top: Math.round(this.scrollTop / step) * step, behavior: 'smooth' });
+        });
+});
+
 /**
  * [퍼블리싱 임시 구현 / 프론트 연동 필요]
  * - 한 달 단위 달력 렌더링
@@ -8,10 +90,7 @@
  * - 추후 예약 가능 날짜 및 시간 API 연동 필요
  */
 $(function () {
-    console.log('달력 초기화 실행');
-
     const $calendar = $('[data-calendar="order"]');
-    console.log('달력 요소 개수:', $calendar.length);
 
     if (!$calendar.length) return;
 
@@ -76,39 +155,8 @@ $(function () {
             `;
         }
 
-        $monthList.html(monthHtml).off('scroll.monthPicker').on('scroll.monthPicker', activateCenteredMonth);
-    }
-
-    function getMonthItemStep($monthList) {
-        const itemHeight = $monthList.children('[data-month]').first().outerHeight() || 0;
-        const itemGap = parseFloat(window.getComputedStyle($monthList[0]).rowGap) || 0;
-        return itemHeight + itemGap;
-    }
-
-    function centerSelectedMonth(behavior = 'auto') {
-        const $monthList = $('[data-month-list]');
-        const selectedIndex = $monthList.children('[data-month].is-selected').index();
-        if (selectedIndex < 0) return;
-
-        $monthList[0].scrollTo({
-            top: selectedIndex * getMonthItemStep($monthList),
-            behavior
-        });
-    }
-
-    function activateCenteredMonth() {
-        const $monthList = $('[data-month-list]');
-        const monthIndex = Math.max(0, Math.min(
-            $monthList.children('[data-month]').length - 1,
-            Math.round($monthList.scrollTop() / getMonthItemStep($monthList))
-        ));
-
-        $monthList.children('[data-month]')
-            .removeClass('is-selected')
-            .attr('aria-pressed', 'false')
-            .eq(monthIndex)
-            .addClass('is-selected')
-            .attr('aria-pressed', 'true');
+        $monthList.html(monthHtml);
+        $(document).trigger('month-picker:refresh', [$monthList]);
     }
 
     function formatDate(year, month, day) {
@@ -274,49 +322,6 @@ $(function () {
         syncOrderDateTime();
     });
 
-    let monthPickerDragged = false;
-    $(document).on('click', '[data-month-list] [data-month]', function (event) {
-        if (monthPickerDragged) {
-            event.preventDefault();
-            monthPickerDragged = false;
-            return;
-        }
-        const monthIndex = $(this).index();
-        const $monthList = $(this).closest('[data-month-list]');
-        $monthList[0].scrollTo({
-            top: monthIndex * getMonthItemStep($monthList),
-            behavior: 'smooth'
-        });
-    });
-
-    $(document).on('month-picker:open', function () {
-        window.requestAnimationFrame(function () {
-            centerSelectedMonth();
-        });
-    });
-
-    let monthDragStartY = 0;
-    let monthDragStartScroll = 0;
-    $(document).on('pointerdown', '[data-month-list]', function (event) {
-        if (event.originalEvent.pointerType !== 'mouse') return;
-        monthDragStartY = event.originalEvent.clientY;
-        monthDragStartScroll = this.scrollTop;
-        monthPickerDragged = false;
-        this.setPointerCapture(event.originalEvent.pointerId);
-        $(this).addClass('is-dragging');
-    });
-    $(document).on('pointermove', '[data-month-list].is-dragging', function (event) {
-        if (Math.abs(monthDragStartY - event.originalEvent.clientY) > 3) monthPickerDragged = true;
-        this.scrollTop = monthDragStartScroll + monthDragStartY - event.originalEvent.clientY;
-    });
-    $(document).on('pointerup pointercancel', '[data-month-list].is-dragging', function () {
-        $(this).removeClass('is-dragging');
-        const $monthList = $(this);
-        const monthItemStep = getMonthItemStep($monthList);
-        const monthIndex = Math.round(this.scrollTop / monthItemStep);
-        this.scrollTo({ top: monthIndex * monthItemStep, behavior: 'smooth' });
-    });
-
     $(document).on('click', '[data-action="select-month"]', function () {
         const selectedMonth = $('[data-month-list] [data-month].is-selected').attr('data-month');
         if (!selectedMonth) return;
@@ -328,7 +333,6 @@ $(function () {
     });
 
     // 최초 렌더링
-    console.log('렌더링 시작');
     try {
         const storedTime = window.sessionStorage.getItem('orderTime');
         const $storedTime = storedTime ? $('[data-time="' + storedTime + '"]:not(:disabled)').first() : $();

@@ -17,6 +17,10 @@ $orderActionKeys = [
 ];
 ?>
 <?php include __DIR__ . '/../../include/components/layout/head.php'; ?>
+<?php
+$mobileHeaderBackUrl = '/pages/myshop/index.php';
+$mobileHeaderBackUsesHistory = false;
+?>
 <?php include __DIR__ . '/../../include/components/layout/sub-header.php'; ?>
 <link rel="stylesheet" href="/assets/css/order.css">
 
@@ -68,11 +72,18 @@ $orderActionKeys = [
                     </dl>
                 </section>
 
-                <section class="myshop-period" aria-labelledby="myshop-period-title" data-myshop-period-filter>
-                    <h2 id="myshop-period-title Body-XS3">조회 기간</h2>
-                    <div class="myshop-period__controls">
+                <div class="myshop-dashboard__orders" data-myshop-dashboard-orders>
+                <section class="myshop-period myshop-period--dashboard" aria-labelledby="myshop-period-title" data-myshop-period-filter>
+                    <h2 id="myshop-period-title" class="Body-XS3">조회 기간</h2>
+                    <button type="button" class="myshop-period__mobile-toggle" aria-expanded="false" aria-controls="myshop-period-controls" data-period-mobile-toggle>
+                        <span data-period-summary-months>1개월</span>
+                        <i aria-hidden="true"></i>
+                        <span><span data-period-summary-start>2026-07-01</span> ~ <span data-period-summary-end>2026-08-01</span></span>
+                        <img src="/assets/icons/select-arrow-ico.svg" alt="">
+                    </button>
+                    <div class="myshop-period__controls" id="myshop-period-controls">
                         <div class="myshop-period__presets">
-                            <button class="btnNormal sizeL" type="button" class="is-active" data-period-months="1">1개월</button>
+                            <button class="btnNormal sizeL is-active" type="button" data-period-months="1">1개월</button>
                             <button class="btnNormal sizeL" type="button" data-period-months="3">3개월</button>
                             <button class="btnNormal sizeL" type="button" data-period-months="6">6개월</button>
                         </div>
@@ -154,7 +165,7 @@ $orderActionKeys = [
                                         <?php if ($order['actions']): ?>
                                             <div class="myshop-order-card__actions" data-order-actions>
                                                 <?php foreach ($order['actions'] as $action): ?>
-                                                    <button type="button" class="<?= $action === '구매 확정' ? 'btnSubmit' : 'btnNormal' ?> sizeS" data-order-action="<?= htmlspecialchars($orderActionKeys[$action] ?? '') ?>"<?= $action === '주문 취소' ? ' data-modal-open="order-cancel-request-modal"' : '' ?><?= $action === '옵션 변경' ? ' data-option-change-trigger data-modal-open="option-change-modal"' : '' ?>><?= htmlspecialchars($action) ?></button>
+                                                    <button type="button" class="<?= $action === '구매 확정' ? 'btnSubmit' : 'btnNormal' ?> sizeS" data-order-action="<?= htmlspecialchars($orderActionKeys[$action] ?? '') ?>"<?= $action === '주문 취소' ? ' data-modal-open="order-cancel-request-modal"' : '' ?><?= $action === '옵션 변경' ? ' data-option-change-trigger data-modal-open="option-change-modal"' : '' ?><?= $action === '리뷰 작성' ? ' data-review-write data-modal-open="review-write-modal"' : '' ?>><?= htmlspecialchars($action) ?></button>
                                                 <?php endforeach; ?>
                                             </div>
                                         <?php endif; ?>
@@ -164,6 +175,7 @@ $orderActionKeys = [
                         <?php endforeach; ?>
                     </div>
                 </section>
+                </div>
             </main>
         </div>
     </div>
@@ -171,5 +183,6 @@ $orderActionKeys = [
 
 <?php include __DIR__ . '/../../include/components/modal/order-cancel-request-modal.php'; ?>
 <?php include __DIR__ . '/../../include/components/modal/option-change-modal.php'; ?>
+<?php include __DIR__ . '/../../include/components/modal/review-write-modal.php'; ?>
 
 <?php include __DIR__ . '/../../include/components/layout/footer.php'; ?>

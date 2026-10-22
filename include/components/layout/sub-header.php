@@ -26,7 +26,7 @@ $mobileHeaderTitles = [
     '/pages/order/order-result.php' => '주문 완료',
     '/pages/order/payment.php' => '주문/결제',
     '/pages/order/products.php' => '상품 선택',
-    '/pages/myshop/index.php' => '마이페이지',
+    '/pages/myshop/index.php' => '마이페이지 홈',
     '/pages/myshop/addresses.php' => '배송지 관리',
     '/pages/myshop/cancel.php' => '주문취소 내역',
     '/pages/myshop/coupons.php' => '쿠폰 관리',
@@ -52,6 +52,7 @@ if ($mobileHeaderPath === '/pages/order/reservation.php') {
 }
 
 $mobileHeaderBackUrl = $mobileHeaderBackUrl ?? '/';
+$mobileHeaderBackUsesHistory = $mobileHeaderBackUsesHistory ?? true;
 ?>
 <header class="site-header sub-header" id="site-header">
     <div class="site-header__inner flex">
@@ -115,7 +116,7 @@ $mobileHeaderBackUrl = $mobileHeaderBackUrl ?? '/';
     }
     ?>
     <div class="mobile-sub-header" data-mobile-sub-header>
-        <a class="mobile-sub-header__back" href="<?= htmlspecialchars($mobileHeaderBackUrl, ENT_QUOTES, 'UTF-8') ?>" aria-label="뒤로가기" data-mobile-header-back>
+        <a class="mobile-sub-header__back" href="<?= htmlspecialchars($mobileHeaderBackUrl, ENT_QUOTES, 'UTF-8') ?>" aria-label="뒤로가기"<?= $mobileHeaderBackUsesHistory ? ' data-mobile-header-back' : '' ?>>
             <img src="/assets/icons/m-back-ico.svg" alt="">
         </a>
 
@@ -173,35 +174,35 @@ $mobileHeaderBackUrl = $mobileHeaderBackUrl ?? '/';
 <div class="m-menu-bar displaynone">
     <ul>
         <li>
-            <button type="button" data-mobile-category-toggle aria-expanded="false" aria-controls="mobile-category-menu">
+            <button type="button" data-mobile-nav="category" data-mobile-category-toggle aria-expanded="false" aria-controls="mobile-category-menu">
                 <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-cate-ico.svg" alt="">
                 <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-cate-ico-active.svg" alt="">
                 <span>카테고리</span>
             </button>
         </li>
         <li>
-            <a href="#quick-delivery-fee-modal" data-modal-open="quick-delivery-fee-modal">
+            <a href="#quick-delivery-fee-modal" data-mobile-nav="quick" data-modal-open="quick-delivery-fee-modal">
                 <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-quick-ico.svg" alt="">
                 <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-quick-ico-active.svg" alt="">
                 <span>퀵배송조회</span>
             </a>
         </li>
         <li>
-            <a href="/" class="is-active" aria-current="page">
+            <a href="/" data-mobile-nav="home">
                 <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-home-ico.svg" alt="">
                 <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-home-ico-active.svg" alt="">
                 <span>홈</span>
             </a>
         </li>
         <li>
-            <a href="/pages/order/basket.php">
+            <a href="/pages/order/basket.php" data-mobile-nav="cart">
                 <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-cart-ico.svg" alt="">
                 <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-cart-ico-active.svg" alt="">
                 <span>장바구니</span>
             </a>
         </li>
         <li>
-            <a href="/pages/myshop/index.php">
+            <a href="/pages/myshop/index.php" data-mobile-nav="myshop">
                 <img class="m-menu-bar__icon m-menu-bar__icon--default" src="/assets/icons/m-myshop-ico.svg" alt="">
                 <img class="m-menu-bar__icon m-menu-bar__icon--active" src="/assets/icons/m-myshop-ico-active.svg" alt="">
                 <span>마이</span>

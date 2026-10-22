@@ -176,8 +176,7 @@ body:has(.order-payment) #site-footer { display: none; }
 @media screen and (max-width: 768px){
  .order-payment__title { display: none; } 
  body:has(.order-payment) { padding-bottom: 126px; } 
- .order-payment__layout { display: block; } 
- .order-payment__layout { margin-top: 0; } 
+ .order-payment__layout { display: block; margin-top: 0; }
  
  /* 탭 영역 */
  .common-tabs__list { border-radius: 0; padding: 8px 16px; } 
@@ -186,8 +185,7 @@ body:has(.order-payment) #site-footer { display: none; }
  /* 컨텐츠 영역 */
  .order-payment__panel-wrap { margin-top: 0; } 
  .order-payment__panel { gap: 0; } 
- .order-payment__section { border-radius: 0; border: none; } 
- .order-payment__section { border-bottom: 4px solid var(--gray-1); } 
+ .order-payment__section { border: none; border-bottom: 4px solid var(--gray-1); border-radius: 0; }
  .order-payment__section-title { border-bottom: none; } 
  .order-payment__section-body:has( .order-payment__products) { padding: 20px 16px; } 
 
@@ -243,10 +241,7 @@ body:has(.order-payment) #site-footer { display: none; }
  .delivery-datetime-modal .order-time__list { gap: 10px; }
  .delivery-datetime-modal .order-time__item { padding: 10px 8px; }
  .delivery-datetime-modal__footer { flex: none; padding: 10px 16px 20px; }
- #month-select-sheet { z-index: 100001; }
- #month-select-sheet .month-select__list { overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; }
- #month-select-sheet .month-select__list.is-dragging { scroll-snap-type: none; }
- #month-select-sheet .month-select__item { scroll-snap-align: center; scroll-snap-stop: always; }
+ body:has(.order-payment) #month-select-sheet { z-index: 100001; }
 
  /* 모달 공통 */
  
@@ -274,7 +269,6 @@ body:has(.order-payment) #site-footer { display: none; }
  .delivery-address-change-modal__list {
     max-height: unset;
  }
- .order-payment__guest-address-row { grid-template-columns: minmax(0, 1fr) 92px; gap: 10px; } 
  .delivery-address-modal__body { padding-right: 16px; padding-left: 16px; } 
  .delivery-address-modal__address-row { grid-template-columns: minmax(0, 1fr) 92px; } 
  .order-payment__guest-address-row { grid-template-columns: minmax(0, 1fr) 92px; gap: 10px; } 

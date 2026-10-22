@@ -17,8 +17,12 @@ $myshopMenus = [
     <nav aria-label="마이페이지 메뉴">
         <ul class="myshop-menu__list">
             <?php foreach ($myshopMenus as $menu): ?>
-                <li class="myshop-menu__item<?= $myshopCurrentPage === $menu['file'] ? ' is-active' : '' ?>">
-                    <a href="/pages/myshop/<?= htmlspecialchars($menu['file']) ?>"<?= $myshopCurrentPage === $menu['file'] ? ' aria-current="page"' : '' ?>><?= htmlspecialchars($menu['label']) ?></a>
+                <?php
+                $isHomeMenu = $menu['file'] === 'index.php';
+                $isActiveMenu = $myshopCurrentPage === $menu['file'];
+                ?>
+                <li class="myshop-menu__item<?= $isActiveMenu ? ' is-active' : '' ?>">
+                    <a href="/pages/myshop/<?= htmlspecialchars($menu['file']) ?>"<?= $isActiveMenu ? ' aria-current="page"' : '' ?><?= $isHomeMenu ? ' data-myshop-home-link' : '' ?>><?= htmlspecialchars($menu['label']) ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>

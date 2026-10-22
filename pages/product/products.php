@@ -17,7 +17,7 @@ $productTotal = 65;
                         <p class="products-page__count Body-XXS3">총 <strong><?= number_format($productTotal) ?>건</strong></p>
 
                         <div class="product-sort custom-select" data-product-sort>
-                            <button type="button" class="product-sort__trigger custom-select__trigger js-dropdown-trigger" data-dropdown-target="product-sort-options" aria-expanded="false" aria-controls="product-sort-options"><span data-product-sort-label>정렬방식</span><img src="/assets/icons/select-arrow-ico.svg" alt=""></button>
+                            <button type="button" class="product-sort__trigger custom-select__trigger" aria-expanded="false" aria-controls="product-sort-options"><span data-product-sort-label>정렬방식</span><img src="/assets/icons/select-arrow-ico.svg" alt=""></button>
                             <ul class="product-sort__options custom-select__options js-dropdown-content" id="product-sort-options" role="listbox" hidden>
                                 <li><button type="button" class="product-sort__option is-selected" role="option" aria-selected="true" data-sort-value="default">정렬방식</button></li>
                                 <li><button type="button" class="product-sort__option" role="option" aria-selected="false" data-sort-value="popular">인기순</button></li>

@@ -339,6 +339,25 @@ body:has(.order-page--reservation) #site-footer { display: none; }
 .order-products__list .product-card__desc { font-size: 14px; } 
 .order-products__list .product-card__price strong { font-size: 20px; } 
 
+@media screen and (max-width: 768px) {
+    #contents:has( .guest-order-lookup) {
+        padding-top: 30px;
+    }
+    .guest-order-lookup .title-center {
+        display: none;
+    }
+    .guest-order-lookup__submit {
+        padding: 10px 24px;
+        font-size: 14px;
+    }
+    .guest-order-lookup__field + .guest-order-lookup__field {
+        margin-top: 20px;
+    }
+    .guest-order-lookup__notice {
+        font-size: 12px;
+    }
+}
+
 /* 주문 상품 미선택 토스트 */
 .order-toast { position: fixed; left: 50%; bottom: 40px; z-index: 100000; padding: 12px 20px; border-radius: 4px; color: #fff; background: rgba(34, 34, 34, 0.9); opacity: 0; visibility: hidden; transform: translate(-50%, 10px); transition: opacity .2s, visibility .2s, transform .2s; pointer-events: none; } 
 .order-toast.is-show { opacity: 1; visibility: visible; transform: translate(-50%, 0); } 

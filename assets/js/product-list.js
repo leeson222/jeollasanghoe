@@ -30,12 +30,7 @@ $(function () {
         $option.addClass('is-selected').attr('aria-selected', 'true');
         $label.text($option.text());
         $trigger.attr('aria-expanded', 'false').removeClass('is-active');
-        $sort.find('.product-sort__options').prop('hidden', true).removeClass('is-open');
-    });
-
-    $(document).on('click.productSort', function (event) {
-        if ($(event.target).closest('[data-product-sort]').length) return;
-        $trigger.attr('aria-expanded', 'false').removeClass('is-active');
+        $sort.removeClass('is-open');
         $sort.find('.product-sort__options').prop('hidden', true).removeClass('is-open');
     });
 });

@@ -141,14 +141,17 @@ $(function () {
         const $currentHeader = $('#site-header:visible, .sub-header:visible').first();
         const $currentFooter = $('#site-footer');
         const $mobileMenuBar = $('.m-menu-bar:visible').first();
+        const $mobileBottomSticky = $('.order-summary-mobile-bar:visible, .product-purchase-mobile-bar:visible, .payment-mobile-sticky:visible').first();
 
         const headerHeight = $currentHeader.outerHeight() || 0;
         const footerHeight = $currentFooter.outerHeight() || 0;
         const mobileMenuBarHeight = $mobileMenuBar.outerHeight() || 0;
+        const mobileBottomStickyHeight = $mobileBottomSticky.outerHeight() || 0;
 
         document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
         document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
         document.documentElement.style.setProperty('--m-menu-bar-height', `${mobileMenuBarHeight}px`);
+        document.documentElement.style.setProperty('--mobile-bottom-sticky-height', `${mobileBottomStickyHeight}px`);
     }
 
     updateHeaderHeight();
