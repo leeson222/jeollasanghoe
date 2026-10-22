@@ -43,9 +43,9 @@
         </div>
     </div>
     <div class="product-detail-reviews__photos">
-        <h4>포토 리뷰 <span><?= (int)$productDetail['review_count'] ?></span></h4>
+        <h4>포토 리뷰 <span><?= (int)($productDetail['photo_review_count'] ?? $productDetail['review_count']) ?></span></h4>
         <div class="product-detail-reviews__photo-list">
-            <?php for ($i=0;$i<6;$i++): ?><button type="button" data-review-photo="<?= $i ?>"><img src="/assets/images/prod-img01.png" alt="리뷰 이미지 <?= $i+1 ?>"><?php if ($i===5): ?><span>전체보기</span><?php endif; ?></button><?php endfor; ?>
+            <?php for ($i=0;$i<6;$i++): ?><button type="button" data-review-photo="<?= $i ?>" <?= $i === 5 ? 'data-modal-open="photo-review-list-modal"' : 'data-review-photo-open' ?>><img src="/assets/images/prod-img01.png" alt="리뷰 이미지 <?= $i+1 ?>"><?php if ($i===5): ?><span>전체보기</span><?php endif; ?></button><?php endfor; ?>
         </div>
     </div>
 

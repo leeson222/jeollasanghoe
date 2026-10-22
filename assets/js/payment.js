@@ -17,16 +17,33 @@ $(function () {
     const $datetimeModal = $('#delivery-datetime-modal');
     const $calendarMonth = $datetimeModal.find('[data-delivery-calendar-month]');
     const $calendarDays = $datetimeModal.find('[data-delivery-calendar-days]');
+    const $calendarWeekdays = $datetimeModal.find('[data-delivery-calendar-weekdays]');
+    const $calendarStrip = $datetimeModal.find('[data-delivery-calendar-strip]');
     const $calendarPrev = $datetimeModal.find('[data-delivery-calendar-prev]');
     const $timeOptions = $datetimeModal.find('[data-delivery-time-option]');
     const $datetimeSave = $datetimeModal.find('[data-delivery-datetime-save]');
     const $couponModal = $('#payment-coupon-modal');
     const $couponLabel = $payment.find('[data-payment-coupon-label]');
+    const $paymentTotal = $payment.find('[data-payment-total]').first();
     let pendingDate = '';
     let pendingTime = '';
     let calendarView = startOfMonth(new Date());
     let $activeDate = $deliveryDate;
     let $activeTime = $deliveryTime;
+
+    function syncMobilePaymentTotal() {
+        const totalText = $paymentTotal.text().trim();
+        $payment.find('[data-payment-mobile-total], [data-payment-mobile-submit-amount]').text(totalText);
+    }
+
+    if ($paymentTotal.length) {
+        new MutationObserver(syncMobilePaymentTotal).observe($paymentTotal[0], {
+            childList: true,
+            characterData: true,
+            subtree: true
+        });
+        syncMobilePaymentTotal();
+    }
     let activeScheduleType = 'delivery';
 
     function readSessionValue(key) {
@@ -173,9 +190,11 @@ $(function () {
         $calendarMonth.text(year + '년 ' + (month + 1) + '월');
         $calendarPrev.toggleClass('is-disable', isCurrentMonth).prop('disabled', isCurrentMonth).attr('aria-disabled', isCurrentMonth ? 'true' : 'false');
         $calendarDays.empty();
+        $calendarWeekdays.empty();
 
         for (let index = 0; index < cellCount; index += 1) {
             const cellDate = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + index);
+            const weekday = cellDate.getDay();
             const value = dateValue(cellDate);
             const isOutside = cellDate.getMonth() !== month;
             const isUnavailable = isOutside || cellDate < today;
@@ -190,6 +209,10 @@ $(function () {
                 .prop('disabled', isUnavailable);
             if (value === todayValue()) $day.attr('aria-current', 'date');
             if (isSelected) $day.attr('aria-pressed', 'true');
+            $('<span></span>')
+                .text(['일', '월', '화', '수', '목', '금', '토'][weekday])
+                .toggleClass('red', weekday === 0)
+                .appendTo($calendarWeekdays);
             $calendarDays.append($day);
         }
         updateDatetimeSaveState();
@@ -203,7 +226,124 @@ $(function () {
         calendarView = selectedMonth < currentMonth ? currentMonth : selectedMonth;
         renderCalendar();
         renderTimeOptions();
+
+        if (window.innerWidth <= 768) {
+            window.requestAnimationFrame(function () {
+                const $target = $calendarDays.find('.is-selected, [aria-current="date"]').first();
+                if ($target.length) {
+                    const daysStart = $calendarDays[0] ? $calendarDays[0].offsetLeft : 0;
+                    $calendarStrip.scrollLeft(Math.max(0, $target[0].offsetLeft - daysStart));
+                }
+            });
+        }
     }
+
+    function paymentMonthItemStep($list) {
+        const itemHeight = $list.children('[data-month]').first().outerHeight() || 0;
+        const itemGap = parseFloat(window.getComputedStyle($list[0]).rowGap) || 0;
+        return itemHeight + itemGap;
+    }
+
+    function activatePaymentCenteredMonth() {
+        const $list = $('#month-select-sheet [data-month-list]');
+        const step = paymentMonthItemStep($list);
+        if (!step) return;
+        const index = Math.max(0, Math.min(
+            $list.children('[data-month]').length - 1,
+            Math.round($list.scrollTop() / step)
+        ));
+
+        $list.children('[data-month]')
+            .removeClass('is-selected')
+            .attr('aria-pressed', 'false')
+            .eq(index)
+            .addClass('is-selected')
+            .attr('aria-pressed', 'true');
+    }
+
+    function centerPaymentSelectedMonth(behavior = 'auto') {
+        const $list = $('#month-select-sheet [data-month-list]');
+        const selectedIndex = $list.children('[data-month].is-selected').index();
+        if (selectedIndex < 0) return;
+        $list[0].scrollTo({
+            top: selectedIndex * paymentMonthItemStep($list),
+            behavior
+        });
+    }
+
+    function renderPaymentMonthList() {
+        const $list = $('#month-select-sheet [data-month-list]');
+        const currentMonth = startOfMonth(new Date());
+        let html = '';
+
+        for (let index = 0; index < 12; index += 1) {
+            const optionDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + index, 1);
+            const value = optionDate.getFullYear() + '-' + String(optionDate.getMonth() + 1).padStart(2, '0');
+            const isSelected = optionDate.getTime() === calendarView.getTime();
+            html += `<button type="button" class="month-select__item${isSelected ? ' is-selected' : ''}" data-month="${value}" aria-pressed="${isSelected}">${optionDate.getFullYear()}년 ${optionDate.getMonth() + 1}월</button>`;
+        }
+
+        $list.html(html)
+            .off('scroll.monthPicker')
+            .on('scroll.monthPicker', activatePaymentCenteredMonth);
+    }
+
+    $(document).on('click', '[data-delivery-calendar-month-open]', renderPaymentMonthList);
+
+    $(document).on('month-picker:open', function () {
+        window.requestAnimationFrame(function () {
+            centerPaymentSelectedMonth();
+        });
+    });
+
+    let paymentMonthDragged = false;
+
+    $(document).on('click', '#month-select-sheet [data-month]', function (event) {
+        if (paymentMonthDragged) {
+            event.preventDefault();
+            paymentMonthDragged = false;
+            return;
+        }
+        const $list = $(this).closest('[data-month-list]');
+        $list[0].scrollTo({
+            top: $(this).index() * paymentMonthItemStep($list),
+            behavior: 'smooth'
+        });
+    });
+
+    let paymentMonthDragStartY = 0;
+    let paymentMonthDragStartScroll = 0;
+
+    $(document).on('pointerdown', '#month-select-sheet [data-month-list]', function (event) {
+        if (event.originalEvent.pointerType !== 'mouse') return;
+        paymentMonthDragStartY = event.originalEvent.clientY;
+        paymentMonthDragStartScroll = this.scrollTop;
+        paymentMonthDragged = false;
+        this.setPointerCapture(event.originalEvent.pointerId);
+        $(this).addClass('is-dragging');
+    });
+
+    $(document).on('pointermove', '#month-select-sheet [data-month-list].is-dragging', function (event) {
+        if (Math.abs(paymentMonthDragStartY - event.originalEvent.clientY) > 3) paymentMonthDragged = true;
+        this.scrollTop = paymentMonthDragStartScroll + paymentMonthDragStartY - event.originalEvent.clientY;
+    });
+
+    $(document).on('pointerup pointercancel', '#month-select-sheet [data-month-list].is-dragging', function () {
+        $(this).removeClass('is-dragging');
+        const $list = $(this);
+        const step = paymentMonthItemStep($list);
+        const index = Math.round(this.scrollTop / step);
+        this.scrollTo({ top: index * step, behavior: 'smooth' });
+    });
+
+    $(document).on('click', '#month-select-sheet [data-action="select-month"]', function () {
+        const value = $('#month-select-sheet [data-month-list] .is-selected').attr('data-month');
+        if (!value) return;
+        const parts = value.split('-');
+        calendarView = new Date(Number(parts[0]), Number(parts[1]) - 1, 1);
+        renderCalendar();
+        $('#month-select-sheet [data-sheet-close]').first().trigger('click');
+    });
 
     $tabs.on('tabs:change', updateSummary);
     $payment.on('change', 'input[name="pickup_type"], input[name="delivery_type"], [data-payment-pickup-date], [data-payment-pickup-time], [data-delivery-date], [data-delivery-time]', function () {

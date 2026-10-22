@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/assets/css/order.css">
 
 <div id="contents">
-    <div class="order-page">
+    <div class="order-page order-page--products">
         <div class="container">
 
             <!-- 공통 타이틀 -->
@@ -70,7 +70,6 @@
                 $orderNextUrl = '/pages/order/payment.php?' . http_build_query($paymentParams);
                 $orderNextRequiresProduct = true;
                 include __DIR__ . '/../../include/components/order/order-summary.php';
-                unset($orderNextUrl, $orderNextRequiresProduct, $paymentParams);
                 ?>
 
             </div>
@@ -78,8 +77,13 @@
     </div>
 </div>
 
+<!-- 모바일 바텀 시트 -->
+<?php include __DIR__ . '/../../include/components/order/order-summary-sheet.php'; ?>
+<?php unset($orderNextUrl, $orderNextRequiresProduct, $paymentParams); ?>
+
 <!-- 상품 상세 모달 -->
 <?php include __DIR__ . '/../../include/components/modal/order-product-modal.php'; ?>
+<?php include __DIR__ . '/../../include/components/modal/product-review-photo-modal.php'; ?>
 
 <!-- 주문 취소 모달 -->
 <?php include __DIR__ . '/../../include/components/modal/order-cancel-modal.php'; ?>

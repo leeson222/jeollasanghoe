@@ -1,5 +1,5 @@
 <?php include __DIR__ . '/../../include/components/layout/head.php'; ?>
-<?php include __DIR__ . '/../../include/components/layout/sub-header.php'; ?>
+<?php include __DIR__ . '/../../include/components/layout/header.php'; ?>
 
 <link rel="stylesheet" href="/assets/css/order-result.css">
 

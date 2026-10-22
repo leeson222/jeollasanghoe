@@ -6,6 +6,7 @@
     <div class="common-modal__container">
         <button type="button" class="common-modal__close" data-modal-close aria-label="닫기">
             <img src="/assets/icons/close.svg" alt="">
+            <img class="displaynone" src="/assets/icons/close-sizeL.svg" alt="">
         </button>
 
         <div class="common-modal__content">

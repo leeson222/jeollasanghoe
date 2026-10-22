@@ -26,13 +26,27 @@ $(function () {
             .prop('hidden', true)
             .removeClass('is-open');
 
-        $modal.prop('hidden', false).addClass('is-open');
+        window.clearTimeout($modal.data('closeTimer'));
+        $modal.prop('hidden', false).removeClass('is-closing').addClass('is-open');
         $('body').addClass('modal-open');
         $modal.trigger('modal:opened');
     }
 
     // 공통 모달 닫기
     function closeModal($modal) {
+        const isMobileOrderProduct = $modal.is('#order-product-modal') && window.innerWidth <= 768;
+
+        if (isMobileOrderProduct) {
+            $modal.addClass('is-closing');
+            const closeDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300;
+            const closeTimer = window.setTimeout(function () {
+                $modal.prop('hidden', true).removeClass('is-open is-closing');
+                if (!$('.common-modal.is-open').length) $('body').removeClass('modal-open');
+            }, closeDuration);
+            $modal.data('closeTimer', closeTimer);
+            return;
+        }
+
         $modal.prop('hidden', true).removeClass('is-open');
 
         if (!$('.common-modal.is-open').length) {
@@ -79,6 +93,8 @@ $(function () {
     });
 
     $(document).on('modal:opened', '#order-product-modal', function () {
+        $(this).find('.order-product-modal__content').stop(true, true).scrollTop(0);
+
         $(this).find('.swiper').each(function () {
             if (this.swiper) this.swiper.update();
         });

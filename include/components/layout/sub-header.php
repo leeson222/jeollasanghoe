@@ -2,6 +2,56 @@
 /**
  * 서브 헤더 (서브 페이지)
  */
+$mobileHeaderPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+$mobileHeaderPath = is_string($mobileHeaderPath) ? $mobileHeaderPath : '';
+$mobileHeaderType = $mobileHeaderType ?? 'default';
+
+if ($mobileHeaderPath === '/pages/product/products.php') {
+    $mobileHeaderType = 'category';
+} elseif ($mobileHeaderPath === '/pages/product/product-detail.php') {
+    $mobileHeaderType = 'detail';
+}
+
+$mobileHeaderTitles = [
+    '/pages/member/login.php' => '로그인',
+    '/pages/member/join.php' => '회원가입',
+    '/pages/member/join-complete.php' => '가입완료',
+    '/pages/member/find-id.php' => '아이디 찾기/비밀번호 찾기',
+    '/pages/member/find-id-result.php' => '아이디 찾기 결과',
+    '/pages/member/find-pw.php' => '아이디 찾기/비밀번호 찾기',
+    '/pages/member/find-pw-result.php' => '비밀번호 찾기 결과',
+    '/pages/member/change-pw.php' => '비밀번호 변경',
+    '/pages/order/basket.php' => '장바구니',
+    '/pages/order/guest-order.php' => '비회원 주문조회',
+    '/pages/order/order-result.php' => '주문 완료',
+    '/pages/order/payment.php' => '주문/결제',
+    '/pages/order/products.php' => '상품 선택',
+    '/pages/myshop/index.php' => '마이페이지',
+    '/pages/myshop/addresses.php' => '배송지 관리',
+    '/pages/myshop/cancel.php' => '주문취소 내역',
+    '/pages/myshop/coupons.php' => '쿠폰 관리',
+    '/pages/myshop/inquiries.php' => '문의 관리',
+    '/pages/myshop/points.php' => '포인트 관리',
+    '/pages/myshop/profile.php' => '내 정보 수정',
+    '/pages/myshop/reviews.php' => '리뷰 관리',
+    '/pages/myshop/wishlist.php' => '위시리스트',
+    '/pages/myshop/order/detail.php' => '주문 상세',
+    '/pages/sub/brand-story.php' => '브랜드 스토리',
+    '/pages/sub/customer-center.php' => '공지사항',
+    '/pages/sub/faq.php' => 'FAQ',
+    '/pages/sub/read.php' => '공지사항',
+    '/pages/sub/store-guide.php' => '매장 안내',
+];
+
+if ($mobileHeaderPath === '/pages/order/reservation.php') {
+    $mobileHeaderTitle = $mobileHeaderTitle ?? ((($_GET['order_type'] ?? '') === 'quick')
+        ? ((($_GET['delivery_type'] ?? '') === 'scheduled') ? '예약 배달' : '즉시 배달')
+        : ((($_GET['pickup_type'] ?? '') === 'takeout') ? '방문 포장' : '매장 식사'));
+} else {
+    $mobileHeaderTitle = $mobileHeaderTitle ?? ($mobileHeaderTitles[$mobileHeaderPath] ?? '');
+}
+
+$mobileHeaderBackUrl = $mobileHeaderBackUrl ?? '/';
 ?>
 <header class="site-header sub-header" id="site-header">
     <div class="site-header__inner flex">
@@ -50,7 +100,75 @@
         </div>
     </div>
     <?php include __DIR__ . '/mega-menu.php'; ?>
+
+    <?php
+    $mobileActiveCategory = null;
+    if ($mobileHeaderType === 'category') {
+        $mobileActiveCategoryId = $activeCategoryId ?? ($_GET['category'] ?? 'seasonal');
+        foreach ($megaMenuCategories as $mobileCategory) {
+            if ($mobileCategory['id'] === $mobileActiveCategoryId) {
+                $mobileActiveCategory = $mobileCategory;
+                break;
+            }
+        }
+        $mobileActiveCategory = $mobileActiveCategory ?? ($megaMenuCategories[0] ?? ['id' => '', 'name' => '상품']);
+    }
+    ?>
+    <div class="mobile-sub-header" data-mobile-sub-header>
+        <a class="mobile-sub-header__back" href="<?= htmlspecialchars($mobileHeaderBackUrl, ENT_QUOTES, 'UTF-8') ?>" aria-label="뒤로가기" data-mobile-header-back>
+            <img src="/assets/icons/m-back-ico.svg" alt="">
+        </a>
+
+        <div class="mobile-sub-header__center<?= $mobileHeaderType === 'detail' ? ' mobile-sub-header__center--detail' : '' ?><?= $mobileHeaderType === 'category' ? ' mobile-sub-header__center--category' : '' ?>">
+            <?php if ($mobileHeaderType === 'category' && $mobileActiveCategory): ?>
+                <button class="mobile-sub-header__category-toggle" type="button" aria-expanded="false" aria-controls="mobile-product-category-list" data-mobile-product-category-toggle>
+                    <span><?= htmlspecialchars($mobileActiveCategory['name'], ENT_QUOTES, 'UTF-8') ?></span>
+                    <img src="/assets/icons/m-prod-list-menu-arrow-ico.svg" alt="">
+                </button>
+            <?php elseif ($mobileHeaderType !== 'detail'): ?>
+                <strong class="mobile-sub-header__title"><?= htmlspecialchars($mobileHeaderTitle, ENT_QUOTES, 'UTF-8') ?></strong>
+            <?php endif; ?>
+        </div>
+
+        <div class="mobile-sub-header__actions">
+            <a class="mobile-sub-header__home" href="/" aria-label="홈">
+                <img src="/assets/icons/m-sub-h-home-ico.svg" alt="">
+            </a>
+            <a class="mobile-sub-header__cart" href="/pages/order/basket.php" aria-label="장바구니">
+                <img src="/assets/icons/m-sub-h-cart-ico.svg" alt="">
+            </a>
+            <button class="mobile-sub-header__search" type="button" aria-label="검색" aria-expanded="false" aria-controls="header-search-panel" data-search-toggle>
+                <img src="/assets/icons/m-search-ico-hover.svg" alt="">
+            </button>
+        </div>
+
+        <?php if ($mobileHeaderType === 'category'): ?>
+            <nav class="mobile-product-category" id="mobile-product-category-list" aria-label="상품 대메뉴" aria-hidden="true" data-mobile-product-category-menu hidden>
+                <ul class="mobile-product-category__list">
+                    <?php foreach ($megaMenuCategories as $mobileCategory): ?>
+                        <li><a href="/pages/product/products.php?category=<?= urlencode($mobileCategory['id']) ?>"<?= $mobileCategory['id'] === $mobileActiveCategory['id'] ? ' class="is-active" aria-current="page"' : '' ?>><?= htmlspecialchars($mobileCategory['name'], ENT_QUOTES, 'UTF-8') ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </nav>
+        <?php endif; ?>
+    </div>
+
+    <?php if ($mobileHeaderType === 'category' && $mobileActiveCategory): ?>
+        <nav class="mobile-product-subcategory" aria-label="<?= htmlspecialchars($mobileActiveCategory['name'], ENT_QUOTES, 'UTF-8') ?> 소메뉴">
+            <ul class="mobile-product-subcategory__list">
+                <li>
+                    <a href="/pages/product/products.php?category=<?= urlencode($mobileActiveCategory['id']) ?>"<?= ($activeItemId ?? 'all') === 'all' ? ' class="is-active" aria-current="page"' : '' ?>>전체</a>
+                </li>
+                <?php foreach ($mobileActiveCategory['items'] as $mobileItem): ?>
+                    <li>
+                        <a href="/pages/product/products.php?category=<?= urlencode($mobileActiveCategory['id']) ?>&amp;item=<?= urlencode($mobileItem['id']) ?>"<?= ($activeItemId ?? 'all') === $mobileItem['id'] ? ' class="is-active" aria-current="page"' : '' ?>><?= htmlspecialchars($mobileItem['name'], ENT_QUOTES, 'UTF-8') ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </nav>
+    <?php endif; ?>
 </header>
+<div class="mobile-sub-header-spacer" aria-hidden="true"></div>
 
 <div class="m-menu-bar displaynone">
     <ul>

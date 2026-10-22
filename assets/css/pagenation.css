@@ -7,3 +7,10 @@
     color: #fff;
     background: var(--main-gold1, #C7A34A);
 }
+
+@media screen and (max-width: 1024px) {
+    .custom-pagination button {
+        width: 32px;
+        height: 32px;
+    }
+}

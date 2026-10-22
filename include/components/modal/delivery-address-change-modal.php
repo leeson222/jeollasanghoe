@@ -8,7 +8,7 @@
         </div>
 
         <div class="delivery-address-change-modal__body">
-            <button type="button" class="delivery-address-change-modal__add btnNormal sizeM" data-modal-open="delivery-address-modal">배송지 추가하기</button>
+            <button type="button" class="delivery-address-change-modal__add btnNormal sizeM" data-modal-open="delivery-address-modal">배송지 추가</button>
 
             <div class="delivery-address-change-modal__list">
                 <div class="delivery-address-change-modal__item">

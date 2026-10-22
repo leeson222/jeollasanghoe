@@ -21,19 +21,13 @@
                             <p>전라상회가 엄선한 오늘의 수산물</p>
                         </div>
                     </div>
-                    <div class="swiper-slide visual-item visual-item01" style="background-image: url(/assets/images/visual01.png); background-size: cover; background-position: center center;">
+                    <div class="swiper-slide visual-item visual-item02" style="background-image: url(/assets/images/visual02.png); background-size: cover; background-position: center center;">
                         <div class="visual-txt-wrap">
                             <h1>노량진의 신선함을 <br class="pc-br">집에서 만나보세요.</h1>
                             <p>전라상회가 엄선한 오늘의 수산물</p>
                         </div>
                     </div>
-                    <div class="swiper-slide visual-item visual-item01" style="background-image: url(/assets/images/visual01.png); background-size: cover; background-position: center center;">
-                        <div class="visual-txt-wrap">
-                            <h1>노량진의 신선함을 <br class="pc-br">집에서 만나보세요.</h1>
-                            <p>전라상회가 엄선한 오늘의 수산물</p>
-                        </div>
-                    </div>
-                    <div class="swiper-slide visual-item visual-item01" style="background-image: url(/assets/images/visual01.png); background-size: cover; background-position: center center;">
+                    <div class="swiper-slide visual-item visual-item03" style="background-image: url(/assets/images/visual03.png); background-size: cover; background-position: center center;">
                         <div class="visual-txt-wrap">
                             <h1>노량진의 신선함을 <br class="pc-br">집에서 만나보세요.</h1>
                             <p>전라상회가 엄선한 오늘의 수산물</p>

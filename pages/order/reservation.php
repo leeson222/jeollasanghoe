@@ -16,7 +16,7 @@ $orderNextUrl = '/pages/order/products.php?' . http_build_query($orderFlowParams
 <link rel="stylesheet" href="/assets/css/order.css">
 
 <div id="contents">
-    <div class="order-page">
+    <div class="order-page order-page--reservation">
         <div class="container">
             
             <!-- 공통 타이틀 -->
@@ -38,6 +38,7 @@ $orderNextUrl = '/pages/order/products.php?' . http_build_query($orderFlowParams
 
                                     <button type="button" class="order-calendar__month" data-sheet-open="month-select-sheet">
                                         <span class="Body-XS1" data-calendar-month>2026년 10월</span>
+                                        <img src="/assets/icons/calendar-m-arrow.svg" alt="">
                                     </button>
 
                                     <button type="button" class="order-calendar__arrow next" data-calendar-action="next" aria-label="다음 달">
@@ -45,15 +46,16 @@ $orderNextUrl = '/pages/order/products.php?' . http_build_query($orderFlowParams
                                     </button>
                                 </div>
 
-                                <div class="order-calendar__weekdays flex">
-                                    <span class="red">일</span>
-                                    <span>월</span>
-                                    <span>화</span>
-                                    <span>수</span>
-                                    <span>목</span>
-                                    <span>금</span>
-                                    <span>토</span>
-                                </div>
+                                <div class="order-calendar__strip" data-calendar-strip>
+                                    <div class="order-calendar__weekdays">
+                                        <span class="red">일</span>
+                                        <span>월</span>
+                                        <span>화</span>
+                                        <span>수</span>
+                                        <span>목</span>
+                                        <span>금</span>
+                                        <span>토</span>
+                                    </div>
 
                                 <!--
                                     [퍼블리싱 임시 구현 / 프론트 연동 필요]
@@ -64,7 +66,8 @@ $orderNextUrl = '/pages/order/products.php?' . http_build_query($orderFlowParams
                                     - 퀵배송을 통해 접속 시 오늘로부터 일주일만 활성화
                                       일주일을 제외한 날짜에 is-outside 클래스명 추가
                                 -->
-                                <div class="order-calendar__days" data-calendar-days></div>
+                                    <div class="order-calendar__days" data-calendar-days></div>
+                                </div>
                             </div>
 
                             <!-- 시간 선택 -->

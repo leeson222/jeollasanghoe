@@ -34,6 +34,8 @@ $stickyOptions = [
 
 <div class="product-sticky-purchase product-detail-purchase flex-c" data-sticky-purchase data-product-id="<?= htmlspecialchars((string)$productDetail['id']) ?>" data-product-name="<?= htmlspecialchars($productDetail['name'], ENT_QUOTES) ?>">
 
+    <div class="product-sticky-purchase__scroll">
+
     <!-- 기본 옵션 -->
     <div class="product-detail-purchase__default flex-c">
 
@@ -114,6 +116,8 @@ $stickyOptions = [
 
     <!-- 선택 상품 -->
     <div class="product-sticky-purchase__selected product-detail-purchase__selected" data-sticky-selected></div>
+
+    </div>
 
     <!-- 결제금액 -->
     <div class="product-sticky-purchase__total product-detail-purchase__total flex-btw">

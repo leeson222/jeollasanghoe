@@ -2,6 +2,9 @@
 <div id="delivery-datetime-modal" class="common-modal delivery-datetime-modal" role="dialog" aria-modal="true" aria-labelledby="delivery-datetime-modal-title" hidden>
     <div class="dim" data-modal-close></div>
     <div class="common-modal__container delivery-datetime-modal__container">
+        <button type="button" class="delivery-datetime-modal__handle" data-modal-close aria-label="날짜 및 시간 선택 닫기">
+            <span class="bottom-sheet__handle"></span>
+        </button>
         <div class="delivery-datetime-modal__header">
             <h3 id="delivery-datetime-modal-title">날짜 및 시간 선택</h3>
             <button type="button" class="common-modal__close" data-modal-close aria-label="닫기"><img src="/assets/icons/close.svg" alt=""></button>
@@ -12,11 +15,17 @@
                 <div class="order-calendar" data-delivery-calendar>
                     <div class="order-calendar__header flex mb-30">
                         <button type="button" class="order-calendar__arrow prev" data-delivery-calendar-prev aria-label="이전 달"><img src="/assets/icons/calendar-prev.svg" alt=""></button>
-                        <span class="order-calendar__month Body-XS1" data-delivery-calendar-month></span>
+                        <button type="button" class="order-calendar__month" data-delivery-calendar-month-open data-sheet-open="month-select-sheet" aria-expanded="false" aria-controls="month-select-sheet">
+                            <span class="Body-XS1" data-delivery-calendar-month></span>
+                            <img src="/assets/icons/calendar-m-arrow.svg" alt="">
+                        </button>
                         <button type="button" class="order-calendar__arrow next" data-delivery-calendar-next aria-label="다음 달"><img src="/assets/icons/calendar-next.svg" alt=""></button>
                     </div>
-                    <div class="order-calendar__weekdays flex"><span class="red">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
-                    <div class="order-calendar__days" data-delivery-calendar-days></div>
+                    <div class="order-calendar__strip" data-delivery-calendar-strip>
+                        <div class="order-calendar__weekdays order-calendar__weekdays--desktop flex"><span class="red">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+                        <div class="order-calendar__weekdays order-calendar__weekdays--mobile" data-delivery-calendar-weekdays></div>
+                        <div class="order-calendar__days" data-delivery-calendar-days></div>
+                    </div>
                 </div>
 
                 <div class="order-time flex-c">
@@ -63,3 +72,5 @@
         </div>
     </div>
 </div>
+
+<?php include __DIR__ . '/../order/month-select-sheet.php'; ?>

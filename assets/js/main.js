@@ -19,29 +19,25 @@ $(function () {
     const visualSwiper = new Swiper('.visual-slide', {
         loop: true,
         speed: 700,
-
+        effect: 'fade',
+        fadeEffect: {
+            crossFade: true,
+        },
         autoplay: {
             delay: 4000,
-            disableOnInteraction: false
+            disableOnInteraction: false,
         },
-
-        fadeEffect: {
-            crossFade: true
-        },
-
         on: {
             init: function () {
                 $total.text(this.slides.length);
                 $current.text(this.realIndex + 1);
-
                 startProgress();
             },
-
             slideChange: function () {
                 $current.text(this.realIndex + 1);
                 startProgress();
-            }
-        }
+            },
+        },
     });
 
     function startProgress() {

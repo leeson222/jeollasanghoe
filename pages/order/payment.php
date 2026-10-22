@@ -142,7 +142,7 @@ $isPickupInitial = $initialOrderType === 'pickup';
 
                                 <!-- 요청사항 -->
                                 <section class="order-payment__section">
-                                    <h3 class="order-payment__section-title">요청사항</h3>
+                                    <h3 class="order-payment__section-title order-payment__section-title--line">요청사항</h3>
 
                                     <div class="order-payment__section-body">
                                         <div class="order-payment__field">
@@ -158,7 +158,7 @@ $isPickupInitial = $initialOrderType === 'pickup';
 
                                 <!-- 수령자 정보 -->
                                 <section class="order-payment__section">
-                                    <h3 class="order-payment__section-title">수령자 정보</h3>
+                                    <h3 class="order-payment__section-title order-payment__section-title--line">수령자 정보</h3>
 
                                     <div class="order-payment__section-body">
                                         <div class="order-payment__field">
@@ -427,6 +427,16 @@ $isPickupInitial = $initialOrderType === 'pickup';
                         </div>
                     </aside>
 
+                </div>
+
+                <div class="payment-mobile-sticky" aria-label="결제 정보">
+                    <div class="payment-mobile-sticky__total flex-btw">
+                        <strong>총 결제금액</strong>
+                        <strong data-payment-mobile-total>176,000원</strong>
+                    </div>
+                    <button type="button" class="payment-mobile-sticky__submit btnSubmit sizeL" data-payment-submit>
+                        <span data-payment-mobile-submit-amount>176,000원</span> 결제
+                    </button>
                 </div>
             </section>
         </div>

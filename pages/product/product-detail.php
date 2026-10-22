@@ -13,4 +13,5 @@
 
 
 <?php include __DIR__ . '/../../include/components/modal/inquiry-write-modal.php'; ?>
+<?php include __DIR__ . '/../../include/components/modal/product-review-photo-modal.php'; ?>
 <?php include __DIR__ . '/../../include/components/layout/footer.php'; ?>

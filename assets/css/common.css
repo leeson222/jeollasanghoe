@@ -104,7 +104,7 @@ textarea {
     position: relative;
     z-index: 100;
     max-width: 500px;
-    width: 100%;
+    width: calc(100dvw - 32px);
     padding: 20px;
     border-radius: 8px;
     border: 1px solid var(--gray-2);
@@ -141,6 +141,16 @@ textarea {
 }
 .common-modal .dim {
     z-index: 20;
+}
+
+@media screen and (max-width: 768px) {
+    .common-modal__title {
+        font-size: 18px;
+    }
+    .common-modal__close {
+        right: 16px;
+        top: 16px;
+    }
 }
 
 /* 약관/정책 콘텐츠 모달 */

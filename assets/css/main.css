@@ -3,10 +3,12 @@
 메인 :: 공통
 *******************************************************/
 .title.flex-btw { padding: 20px 4px; border-bottom: 1px solid var(--gray-5); } 
-
+.main-sec .title a {
+    gap: 2px;
+}
 @media screen and (max-width: 1024px) {
     .main-sec {
-        margin-bottom: 32px;
+        margin-bottom: 60px;
     }
     .main-sec .title h2 {
         font-size: 20px;
@@ -16,6 +18,9 @@
 @media screen and (max-width: 768px) {
     .main-sec .title {
         margin-bottom: 24px;
+    }
+    .main-sec .title a span {
+        font-size: 14px;
     }
 }
 
@@ -65,7 +70,15 @@
         display: flex;
         align-items: end;
         height: 500px;
+    }
+    .visual .swiper-slide.visual-item01 {
         background-image: url(/assets/images/visual01-m.png) !important;
+    }
+    .visual .swiper-slide.visual-item02 {
+        background-image: url(/assets/images/visual02-m.png) !important;
+    }
+    .visual .swiper-slide.visual-item03 {
+        background-image: url(/assets/images/visual03-m.png) !important;
     }
     .visual-txt-wrap {
         height: auto;
@@ -223,6 +236,41 @@
     }
     .quick-img img {
         width: 100%;
+    }
+
+    /* 모달 */
+    #store-pickup-modal .common-modal__container {
+        width: 100dvw;
+        max-width: 100dvw;
+        height: 100dvh;
+        border-radius: 0;
+    }
+    #store-pickup-modal-title {
+        padding: 0;
+    }
+    #store-pickup-modal .common-modal__close img.displaynone {
+        display: block !important;
+    }
+    #store-pickup-modal .common-modal__close img:not(.displaynone) {
+        display: none !important;
+    }
+    #store-pickup-modal-title, #quick-delivery-modal-title {
+        margin-bottom: 22px;
+    }
+    .store-pickup__options {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .store-pickup__options a {
+        width: 100%;
+    }
+    .store-pickup__item {
+        min-height: 130px;
+        padding: 18px 0;
+    }
+    .store-pickup__notice {
+        padding: 16px;
+        text-align: center;
     }
 }
 
@@ -401,10 +449,26 @@
     }
 }
 
+@media screen and (max-width: 1024px) {
+    .map-area.map-section__map {
+        padding: 20px;
+    }
+}
+
 @media screen and (max-width: 768px) {
+    .sec08 {
+        margin-bottom: 130px;
+    }
     .sec08 .map-section__inner {
         display: flex;
         flex-direction: column;
+        gap: 16px;
+    }
+    .map-addr-area {
+        margin-top: 50px;
+    }
+    .map-area-info p {
+        margin-bottom: 20px;
     }
     .map-img-area figure, .map-img-area figure img {
         width: 100%;

@@ -10,6 +10,10 @@ $detailInstance = 'order-product-modal-detail';
     <div class="dim" data-modal-close></div>
 
     <div class="common-modal__container order-product-modal__container">
+        <button type="button" class="bottom-sheet__handle-wrap order-product-modal__handle" data-modal-close aria-label="상품 상세 닫기">
+            <span class="bottom-sheet__handle"></span>
+        </button>
+
         <div class="common-modal__title-wrap">
             <h3>상품 선택</h3>
             <button type="button" class="common-modal__close" data-modal-close aria-label="닫기">

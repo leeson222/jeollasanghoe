@@ -19,6 +19,29 @@ $(function () {
     const $month = $calendar.find('[data-calendar-month]');
     const $prev = $calendar.find('[data-calendar-action="prev"]');
     const $next = $calendar.find('[data-calendar-action="next"]');
+    const $weekdays = $calendar.find('.order-calendar__weekdays');
+    const $calendarStrip = $calendar.find('[data-calendar-strip]');
+
+    function syncOrderDateTime() {
+        const date = new Date(selectedDate + 'T00:00:00');
+        const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+        const dateLabel = [
+            date.getFullYear(),
+            String(date.getMonth() + 1).padStart(2, '0'),
+            String(date.getDate()).padStart(2, '0')
+        ].join('.') + ' ' + weekdays[date.getDay()];
+        const selectedTimeValue = $('[data-time-picker] [data-time].is-selected:not(:disabled)').first().attr('data-time') || '';
+        let timeLabel = '';
+
+        if (selectedTimeValue) {
+            const timeParts = selectedTimeValue.split(':');
+            const hour = Number(timeParts[0]);
+            timeLabel = (hour < 12 ? '오전 ' : '오후 ') + (hour > 12 ? hour - 12 : hour) + ':' + timeParts[1];
+        }
+
+        $('[data-order-date]').text(dateLabel);
+        if (timeLabel) $('[data-order-time]').text(timeLabel);
+    }
 
     // 최초 진입 시 오늘 날짜 선택
     const today = new Date();
@@ -30,19 +53,63 @@ $(function () {
         today.getDate()
     );
 
-    try {
-        const storedDate = window.sessionStorage.getItem('orderDate');
-        const parsedDate = storedDate ? new Date(storedDate + 'T00:00:00') : null;
-
-        if (parsedDate && !Number.isNaN(parsedDate.getTime()) && parsedDate >= today) {
-            selectedDate = storedDate;
-        }
-    } catch (error) {
-        // 저장소를 사용할 수 없는 환경에서는 오늘 날짜를 사용합니다.
-    }
-
     const initialSelectedDate = new Date(selectedDate + 'T00:00:00');
     let calendarView = new Date(initialSelectedDate.getFullYear(), initialSelectedDate.getMonth(), 1);
+
+    function renderMonthList() {
+        const $monthList = $('[data-month-list]');
+        if (!$monthList.length) return;
+
+        let monthHtml = '';
+        for (let index = 0; index < 12; index++) {
+            const optionDate = new Date(today.getFullYear(), today.getMonth() + index, 1);
+            const optionValue = formatDate(optionDate.getFullYear(), optionDate.getMonth() + 1, 1).slice(0, 7);
+            const isSelected = optionDate.getTime() === calendarView.getTime();
+
+            monthHtml += `
+                <button type="button"
+                    class="month-select__item${isSelected ? ' is-selected' : ''}"
+                    data-month="${optionValue}"
+                    aria-pressed="${isSelected}">
+                    ${optionDate.getFullYear()}년 ${optionDate.getMonth() + 1}월
+                </button>
+            `;
+        }
+
+        $monthList.html(monthHtml).off('scroll.monthPicker').on('scroll.monthPicker', activateCenteredMonth);
+    }
+
+    function getMonthItemStep($monthList) {
+        const itemHeight = $monthList.children('[data-month]').first().outerHeight() || 0;
+        const itemGap = parseFloat(window.getComputedStyle($monthList[0]).rowGap) || 0;
+        return itemHeight + itemGap;
+    }
+
+    function centerSelectedMonth(behavior = 'auto') {
+        const $monthList = $('[data-month-list]');
+        const selectedIndex = $monthList.children('[data-month].is-selected').index();
+        if (selectedIndex < 0) return;
+
+        $monthList[0].scrollTo({
+            top: selectedIndex * getMonthItemStep($monthList),
+            behavior
+        });
+    }
+
+    function activateCenteredMonth() {
+        const $monthList = $('[data-month-list]');
+        const monthIndex = Math.max(0, Math.min(
+            $monthList.children('[data-month]').length - 1,
+            Math.round($monthList.scrollTop() / getMonthItemStep($monthList))
+        ));
+
+        $monthList.children('[data-month]')
+            .removeClass('is-selected')
+            .attr('aria-pressed', 'false')
+            .eq(monthIndex)
+            .addClass('is-selected')
+            .attr('aria-pressed', 'true');
+    }
 
     function formatDate(year, month, day) {
         return [
@@ -56,6 +123,48 @@ $(function () {
     function renderCalendar() {
         const year = calendarView.getFullYear();
         const month = calendarView.getMonth() + 1;
+
+        $('[data-month-list] [data-month]')
+            .removeClass('is-selected')
+            .attr('aria-pressed', 'false')
+            .filter(`[data-month="${formatDate(year, month, 1).slice(0, 7)}"]`)
+            .addClass('is-selected')
+            .attr('aria-pressed', 'true');
+
+        if (window.innerWidth <= 768) {
+            const viewStart = new Date(year, month - 1, 1);
+            const viewEnd = new Date(year, month, 0);
+            const weekdayLabels = ['일', '월', '화', '수', '목', '금', '토'];
+            let weekdayHtml = '';
+            let dayHtml = '';
+
+            for (let currentDate = new Date(viewStart); currentDate <= viewEnd; currentDate.setDate(currentDate.getDate() + 1)) {
+                const date = formatDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
+                const weekday = currentDate.getDay();
+                const isUnavailable = currentDate < today;
+                const isSelected = !isUnavailable && date === selectedDate;
+
+                weekdayHtml += `<span${weekday === 0 ? ' class="red"' : ''}>${weekdayLabels[weekday]}</span>`;
+                dayHtml += `
+                    <button type="button"
+                        class="order-calendar__day${isUnavailable ? ' is-outside' : ''}${isSelected ? ' is-selected' : ''}${!isUnavailable && weekday === 0 ? ' is-sunday' : ''}"
+                        data-date="${date}"
+                        aria-pressed="${isSelected}"
+                        ${isUnavailable ? 'disabled' : ''}>
+                        ${currentDate.getDate()}
+                    </button>
+                `;
+            }
+
+            $month.text(`${year}년 ${month}월`);
+            $weekdays.html(weekdayHtml);
+            $days.html(dayHtml);
+            const todayDate = formatDate(today.getFullYear(), today.getMonth() + 1, today.getDate());
+            const $todayDay = $days.children(`[data-date="${todayDate}"]`);
+            const todayScrollLeft = $todayDay.length ? $todayDay.index() * $todayDay.outerWidth() : 0;
+            $calendarStrip.scrollLeft(todayScrollLeft);
+            return;
+        }
 
         const firstDay = new Date(year, month - 1, 1).getDay();
         const lastDate = new Date(year, month, 0).getDate();
@@ -100,6 +209,7 @@ $(function () {
         }
 
         $month.text(`${year}년 ${month}월`);
+        $weekdays.html('<span class="red">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>');
         $days.html(html);
 
         const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -107,6 +217,12 @@ $(function () {
         $prev.prop('disabled', isCurrentMonth);
         $next.prop('disabled', false);
     }
+
+    let calendarResizeTimer;
+    $(window).on('resize.orderCalendar', function () {
+        window.clearTimeout(calendarResizeTimer);
+        calendarResizeTimer = window.setTimeout(renderCalendar, 100);
+    });
 
 
     // 이전 / 다음 월
@@ -137,6 +253,7 @@ $(function () {
             // 저장소를 사용할 수 없는 환경에서는 화면 상태만 유지합니다.
         }
         renderCalendar();
+        syncOrderDateTime();
     });
 
     $('[data-time-picker]').on('click', '[data-time]', function () {
@@ -154,6 +271,60 @@ $(function () {
         } catch (error) {
             // 저장소를 사용할 수 없는 환경에서는 화면 상태만 유지합니다.
         }
+        syncOrderDateTime();
+    });
+
+    let monthPickerDragged = false;
+    $(document).on('click', '[data-month-list] [data-month]', function (event) {
+        if (monthPickerDragged) {
+            event.preventDefault();
+            monthPickerDragged = false;
+            return;
+        }
+        const monthIndex = $(this).index();
+        const $monthList = $(this).closest('[data-month-list]');
+        $monthList[0].scrollTo({
+            top: monthIndex * getMonthItemStep($monthList),
+            behavior: 'smooth'
+        });
+    });
+
+    $(document).on('month-picker:open', function () {
+        window.requestAnimationFrame(function () {
+            centerSelectedMonth();
+        });
+    });
+
+    let monthDragStartY = 0;
+    let monthDragStartScroll = 0;
+    $(document).on('pointerdown', '[data-month-list]', function (event) {
+        if (event.originalEvent.pointerType !== 'mouse') return;
+        monthDragStartY = event.originalEvent.clientY;
+        monthDragStartScroll = this.scrollTop;
+        monthPickerDragged = false;
+        this.setPointerCapture(event.originalEvent.pointerId);
+        $(this).addClass('is-dragging');
+    });
+    $(document).on('pointermove', '[data-month-list].is-dragging', function (event) {
+        if (Math.abs(monthDragStartY - event.originalEvent.clientY) > 3) monthPickerDragged = true;
+        this.scrollTop = monthDragStartScroll + monthDragStartY - event.originalEvent.clientY;
+    });
+    $(document).on('pointerup pointercancel', '[data-month-list].is-dragging', function () {
+        $(this).removeClass('is-dragging');
+        const $monthList = $(this);
+        const monthItemStep = getMonthItemStep($monthList);
+        const monthIndex = Math.round(this.scrollTop / monthItemStep);
+        this.scrollTo({ top: monthIndex * monthItemStep, behavior: 'smooth' });
+    });
+
+    $(document).on('click', '[data-action="select-month"]', function () {
+        const selectedMonth = $('[data-month-list] [data-month].is-selected').attr('data-month');
+        if (!selectedMonth) return;
+
+        const monthParts = selectedMonth.split('-');
+        calendarView = new Date(Number(monthParts[0]), Number(monthParts[1]) - 1, 1);
+        renderCalendar();
+        $('#month-select-sheet [data-sheet-close]').first().trigger('click');
     });
 
     // 최초 렌더링
@@ -175,7 +346,82 @@ $(function () {
     } catch (error) {
         // 저장소를 사용할 수 없는 환경에서는 현재 화면 상태만 유지합니다.
     }
+    renderMonthList();
     renderCalendar();
+    syncOrderDateTime();
+});
+
+// 주문 단계 모바일 바텀시트
+$(function () {
+    if (!$('.order-page--products').length) return;
+
+    try {
+        const storedDate = window.sessionStorage.getItem('orderDate');
+        const storedTime = window.sessionStorage.getItem('orderTime');
+
+        if (storedDate) {
+            const date = new Date(storedDate + 'T00:00:00');
+            const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+            if (!Number.isNaN(date.getTime())) {
+                $('[data-order-date]').text([
+                    date.getFullYear(),
+                    String(date.getMonth() + 1).padStart(2, '0'),
+                    String(date.getDate()).padStart(2, '0')
+                ].join('.') + ' ' + weekdays[date.getDay()]);
+            }
+        }
+
+        if (storedTime) {
+            const timeParts = storedTime.split(':');
+            const hour = Number(timeParts[0]);
+            $('[data-order-time]').text(
+                (hour < 12 ? '오전 ' : '오후 ') + (hour > 12 ? hour - 12 : hour) + ':' + timeParts[1]
+            );
+        }
+    } catch (error) {
+        // 저장소를 사용할 수 없는 환경에서는 기본 표시값을 유지합니다.
+    }
+});
+
+$(function () {
+    function openSheet(sheetId, $trigger) {
+        const $sheet = $('#' + sheetId);
+        if (!$sheet.length || window.innerWidth > 768) return;
+
+        window.clearTimeout($sheet.data('closeTimer'));
+        $('[data-sheet-open]').attr('aria-expanded', 'false');
+        $trigger.attr('aria-expanded', 'true');
+        $sheet.prop('hidden', false).attr('aria-hidden', 'false');
+        $('body').addClass('order-sheet-open');
+        window.requestAnimationFrame(function () {
+            $sheet.addClass('is-open');
+        });
+        if (sheetId === 'month-select-sheet') $(document).trigger('month-picker:open');
+    }
+
+    function closeSheet($sheet) {
+        if (!$sheet.length) return;
+        $sheet.removeClass('is-open').attr('aria-hidden', 'true');
+        const $trigger = $('[data-sheet-open="' + $sheet.attr('id') + '"]').attr('aria-expanded', 'false');
+        $('body').removeClass('order-sheet-open');
+        const closeTimer = window.setTimeout(function () {
+            $sheet.prop('hidden', true);
+            $trigger.trigger('focus');
+        }, 300);
+        $sheet.data('closeTimer', closeTimer);
+    }
+
+    $(document).on('click', '[data-sheet-open]', function () {
+        openSheet($(this).attr('data-sheet-open'), $(this));
+    });
+
+    $(document).on('click', '.bottom-sheet [data-sheet-close]', function () {
+        closeSheet($(this).closest('.bottom-sheet'));
+    });
+
+    $(document).on('keydown', function (event) {
+        if (event.key === 'Escape') closeSheet($('.bottom-sheet:visible'));
+    });
 });
 
 // 장바구니 선택, 수량 및 결제금액
@@ -430,7 +676,7 @@ $(function () {
     function updateSummaryTotal() {
         $('[data-order-summary-total]').each(function () {
             const $total = $(this);
-            const $summary = $total.closest('.order-summary');
+            const $summary = $total.closest('.order-summary, .order-summary-sheet');
             let amount = 0;
 
             $summary.find('[data-order-product-id]').each(function () {
